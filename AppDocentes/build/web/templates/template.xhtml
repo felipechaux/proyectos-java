@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html   xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>App</title>
+        <link rel="stylesheet" href="../resources/css/estilos.css" />
+
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+        <h:outputStylesheet name="vendors/bootstrap/dist/css/bootstrap.min.css" />
+        <h:outputStylesheet name="vendors/font-awesome/css/font-awesome.min.css" />
+        <h:outputStylesheet name="vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" />
+        <h:outputStylesheet name="build/css/custom.min.css" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous"></link>
+
+    </h:head>
+
+    <h:body class="nav-md">
+        <f:event type="preRenderView" listener="#{usuario.validarSession()}"></f:event>
+
+        <div class="container body">
+            <div class="main_container">
+                <div class="col-md-3 left_col">
+                    <div class="left_col scroll-view">
+                        <div class="navbar nav_title" style="border: 0;">
+
+                            <a onclick="index('#{usuario.url}')" href="#" class="site_title"> <span>App</span></a>
+
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <!-- menu profile quick info -->
+                        <div class="profile clearfix">
+                            <div class="profile_pic">
+
+                                <h:graphicImage value="/resources/images/manuela.jpg" class="img-circle profile_img"/>
+                            </div>
+                            <div class="profile_info">
+                                <span>Bienvenido,</span>
+                                <br></br>
+                                <h:outputLabel style="color:white" value="#{usuario.nombreRol}"/>
+                            </div>
+                        </div>
+                        <!-- /menu profile quick info -->
+
+                        <br />
+
+                        <!-- sidebar menu -->
+                        <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                            <div class="menu_section">
+                                <h3>General</h3>
+                                <ul class="nav side-menu">
+                                    <li><a onclick="index('#{usuario.url}')"><i class="fa fa-home"></i> Home</a>
+
+                                    </li>
+                                    <li><a><i class="fa fa-edit"></i> Administracion <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a id="administracion-bloques" href="../pages/calendarioForm.xhtml?faces-redirect=true">Bloques laboratorio</a></li>
+                                            <li><a id="administracion-servicios" href="../pages/formServicio.xhtml?faces-redirect=true">Servicios tecnologicos</a></li>
+                                            <li><a id="administracion-asignaturas" href="../pages/formAsignatura.xhtml?faces-redirect=true">Asignaturas</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a><i class="fas fa-fingerprint" style="font-size: 20px"></i> Control BIOMINI <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a id="biomini" href="../pages/fingerprint.xhtml">Enrolamiento / Asistencia</a></li>
+
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="../pages/calendarioReserva.xhtml"><i class="fa fa-table"></i> Calendario reservas</a>
+
+                                    </li>
+                                    <li><a><i class="fa fa-bar-chart-o"></i> Reportes <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a id="reporte-asistencia" href="../pages/reporteAsistencia.xhtml">Asistencia</a></li>
+
+                                        </ul>
+                                    </li>
+
+                                </ul>
+                            </div>
+
+
+                        </div>
+                        <!-- /sidebar menu -->
+
+                        <!-- /menu footer buttons -->
+                        <div class="sidebar-footer hidden-small">
+                            <a data-toggle="tooltip" data-placement="top" title="Settings">
+                                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                            </a>
+                            <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+                                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+                            </a>
+                            <a data-toggle="tooltip" data-placement="top" title="Lock">
+                                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+                            </a>
+                        </div>
+                        <!-- /menu footer buttons -->
+                    </div>
+                </div>
+
+                <!-- top navigation -->
+                <div class="top_nav">
+                    <div class="nav_menu">
+                        <nav>
+                            <div class="nav toggle">
+                                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                            </div>
+
+                            <ul class="nav navbar-nav navbar-right">
+                                <li class="">
+                                    <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        <h:graphicImage value="/resources/images/manuela.jpg" alt=""/>
+                                        <h:outputLabel value="#{usuario.nombreUsuario}"/>
+                                        <span class=" fa fa-angle-down"></span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                        <li><a onclick="PF('dlg-perfil').show();"> Perfil</a></li>
+
+
+                                        <!--                                        <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>-->
+                                        <h:form>
+                                            <li><h:commandLink value="Cerrar Sesión" action="#{usuario.salir}" /></li> 
+                                        </h:form>
+
+                                    </ul>
+                                </li>               
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <!-- /top navigation -->
+
+                <!-- page content -->
+                <div class="right_col" role="main">
+
+
+                    <div class="row">
+
+                        <ui:insert name="content"/> 
+
+
+                    </div>
+                    <br />
+                </div>
+                <!-- /page content -->
+
+                <!-- footer content -->
+                <footer>
+                    <div class="pull-right">
+                        Reserva y Prestamo de Aulas de Laboratorio
+                    </div>
+                    <div class="clearfix"></div>
+                </footer>
+                <!-- /footer content -->
+            </div>
+        </div>
+
+        <p:dialog modal="true" styleClass="title" widgetVar="dlg-perfil" header="Modificar cuenta" showEffect="fade" hideEffect="fade" height="170" width="400" resizable="false" draggable="false">
+            <h:form>
+                <p:panelGrid  columns="2" >
+                    <p:outputLabel value="Nombre :"/>
+                    <p:inputText value="#{usuario.nombreUsuario}" />
+                    <p:outputLabel value="Nueva contraseña :"/>
+                    <p:password value="#{usuario.clave}" />
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <p:commandButton value="Guardar cambios" oncomplete="PF('dlg-perfil').hide();" action="#{usuario.modificarCuenta()}"/>
+                </p:panelGrid>
+            </h:form>
+
+        </p:dialog>
+
+
+        <script>
+            function index(url) {
+                window.location.href = url;
+            }
+
+
+        </script>
+        <h:outputScript  name="vendors/bootstrap/dist/js/bootstrap.min.js" />
+        <h:outputScript  name="vendors/bootstrap-progressbar/bootstrap-progressbar.min.js" />
+        <h:outputScript  name="vendors/skycons/skycons.js" />
+        <h:outputScript  name="build/js/custom.min.js" />
+
+    </h:body>
+
+
+</html>		
