@@ -155,19 +155,22 @@ public class Usuario extends Persona implements Serializable {
 
         } else {
             //permisos
-
-            if (this.getNombreRol().equals("DIRECTOR") || this.getNombreRol().equals("COORDINADOR")) {
-                System.out.println("permisos all");
-                permiso = true;
-                url = "../pages/reserva.xhtml?faces-redirect=true";
-            } else if (this.getNombreRol().equals("AUXILIAR DE LABORATORIO")) {
-                permiso = false;
-                permiso2=true;
-                url = "../pages/fingerprint.xhtml?faces-redirect=true";
-            } else if (this.getNombreRol().equals("DOCENTE")) {
-                permiso = false;
-                url = "../pages/reserva.xhtml?faces-redirect=true";
-
+            switch (this.getNombreRol()) {
+                case "DIRECTOR":
+                case "COORDINADOR":
+                    System.out.println("permisos all");
+                    permiso = true;
+                    url = "../pages/reserva.xhtml?faces-redirect=true";
+                    break;
+                case "AUXILIAR DE LABORATORIO":
+                    permiso = false;
+                    permiso2=true;
+                    url = "../pages/fingerprint.xhtml?faces-redirect=true";
+                    break;
+                case "DOCENTE":
+                    permiso = false;
+                    url = "../pages/reserva.xhtml?faces-redirect=true";
+                    break;
             }
 
         }

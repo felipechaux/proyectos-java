@@ -498,7 +498,7 @@ public class FingerPrint extends Persona implements Serializable {
 
     public void pro() {
         System.out.println("prueba ajax");
-
     }
 
 }
+

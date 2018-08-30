@@ -25,7 +25,7 @@ and open the template in the editor.
 }
 
 .btn-huella{
-    background-color: white;
+    background-color: white !important;
     background-image: url("../images/fingerprint.jpg");
     background-repeat: no-repeat;
     border: none;
