@@ -68,7 +68,21 @@
                     <br></br>
 
                 </p:layoutUnit>
+                <script>
+                    //permisos vistas
+                    $(document).on("ready", function () {
+                        switch ('#{usuario.nombreRol}') {
+                            
+                            case 'DOCENTE':
+                            {
 
+                                alert("No tiene suficientes permisos para acceder a esta pagina");
+                                break;
+                            }
+
+                        }
+                    });
+                </script>
             </ui:define> 
         </ui:composition>
     </h:body>

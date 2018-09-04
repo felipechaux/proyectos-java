@@ -32,6 +32,8 @@ public class ListasDAO {
     private String SELECT_D = "SELECT id_persona,nombre_persona FROM personas WHERE id_rol = (SELECT id_rol FROM roles WHERE nombre_rol ='DOCENTE')";
 
     private String SELECT_L = "SELECT l.id_laboratorio,l.nombre_laboratorio FROM laboratorios l ";
+    
+    //laboratorio desde disponibilidad
 
     private String SELECT_M = "SELECT id_materia,nombre_materia FROM materias WHERE id_unidad=?";
 

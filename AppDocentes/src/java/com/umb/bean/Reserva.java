@@ -5,6 +5,7 @@
  */
 package com.umb.bean;
 
+import com.umb.dao.Correo;
 import com.umb.dao.ListasDAO;
 import com.umb.dao.ReservaDAO;
 import com.umb.entities.BloqueLaboratorio;
@@ -27,8 +28,6 @@ import javax.faces.context.FacesContext;
 @SessionScoped
 public class Reserva extends Listas implements Serializable {
 
-    private String reposicion;
-
     FacesMessage message = null;
 
     private Date fecha;
@@ -40,7 +39,7 @@ public class Reserva extends Listas implements Serializable {
     private String tipoServicio;
 
     private List<BloqueLaboratorio> bloques;
-    
+
     private List<ReservaCalendario> reservasCalendario;
 
     public List<ReservaCalendario> getReservasCalendario() {
@@ -107,15 +106,8 @@ public class Reserva extends Listas implements Serializable {
         this.idLaboratorio = idLaboratorio;
     }
 
-    public String getReposicion() {
-        return reposicion;
-    }
 
-    public void setReposicion(String reposicion) {
-        this.reposicion = reposicion;
-    }
-
-    public void reservar(int idDisponibilidad, String permiso, String id) {
+    public void reservar(int idDisponibilidad, String permiso, String id,String usuario) {
 
         System.out.println("permiso reserva " + permiso + " id persona " + id);
         switch (permiso) {
@@ -126,8 +118,10 @@ public class Reserva extends Listas implements Serializable {
                     try {
                         ReservaDAO reserva = new ReservaDAO();
                         reserva.registrarReserva(idPersona, idDisponibilidad, idMateria, "NO");
+                        
                         message = new FacesMessage(FacesMessage.SEVERITY_INFO, reserva.getMessage(), null);
                         FacesContext.getCurrentInstance().addMessage(null, message);
+                        enviarReserva(idPersona,idDisponibilidad,"NO",usuario);
                         //recargar listas
                         init();
                     } catch (Exception e) {
@@ -148,6 +142,7 @@ public class Reserva extends Listas implements Serializable {
                         reserva.registrarReserva(Integer.parseInt(id), idDisponibilidad, idMateria, "SI");
                         message = new FacesMessage(FacesMessage.SEVERITY_INFO, reserva.getMessage(), null);
                         FacesContext.getCurrentInstance().addMessage(null, message);
+                        enviarReserva(Integer.parseInt(id),idDisponibilidad,"SI",usuario);
                         //recargar listas
                         init();
                     } catch (Exception e) {
@@ -164,6 +159,19 @@ public class Reserva extends Listas implements Serializable {
                 break;
         }
 
+    }
+
+    public void enviarReserva(int idPersona, int idDisponibilidad,String reposicion,String usuarioReserva) throws Exception {
+        //persona, laboratorio, materia
+        //llamada a listasDAO
+        System.out.println("correo reserva!!");
+
+        System.out.println("persona: "+idPersona+" Materia: "+idMateria+" Laboratorio : "+idDisponibilidad+" Reposicion "+reposicion+" bloque "+""+" Usuario reservo "+usuarioReserva);
+        Correo correo = new Correo();
+        correo.enviarReserva();
+
+       // message = new FacesMessage(FacesMessage.SEVERITY_INFO, correo.getMessage(), null);
+       // FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     public void pro(int idDisponibilidad) {
@@ -194,8 +202,8 @@ public class Reserva extends Listas implements Serializable {
 
     public void cargarServicios(int idLaboratorio) {
         System.out.println("cargue servicios ");
-         System.out.println("id"+idLaboratorio+" tipo"+tipoServicio);
-        if (idLaboratorio != 0  && tipoServicio!=null) {
+        System.out.println("id" + idLaboratorio + " tipo" + tipoServicio);
+        if (idLaboratorio != 0 && tipoServicio != null) {
             System.out.println("entra ");
             ReservaDAO detalle = new ReservaDAO();
             servicios = detalle.getDetalleServicios(idLaboratorio, tipoServicio);

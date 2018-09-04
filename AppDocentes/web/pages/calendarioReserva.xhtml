@@ -68,11 +68,27 @@
                     </h:panelGrid>
 
                 </p:layoutUnit>
+    
                 <script>
 
                     $(document).on("ready", function () {
                         command();
+
+
+                        //permisos vistas
+                        switch ('#{usuario.nombreRol}') {
+
+                            case 'DOCENTE':
+                            {
+
+                                alert("No tiene suficientes permisos para acceder a esta pagina");
+                                break;
+                            }
+
+                        }
                     });
+
+
                 </script>
             </ui:define>
         </ui:composition>

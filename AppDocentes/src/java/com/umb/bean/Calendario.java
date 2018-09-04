@@ -110,16 +110,14 @@ public class Calendario extends BloqueLaboratorio implements Serializable {
 
     public void correo() throws Exception {
         System.out.println("correo!!");
+       
         System.out.println("fecha : " + this.getFecha() + "; bloquei " + this.getBloqueInicio() + "; bloqueF " + this.getBloqueFin() + " lab" + this.getNombreLaboratorio());
         Correo correo = new Correo();
         correo.enviarCorreo(this.getFecha(), this.getBloqueInicio(), this.getNombreLaboratorio());
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, correo.getMessage(), null);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-
-    public void calendar() {
-        System.out.println("hola calendar ");
-    }
+ 
 
     public String getLabel(List<Lista> list, int idLaboratorio) {
         String label = "";

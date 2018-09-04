@@ -20,7 +20,7 @@
                                   styleClass="pLayoutContenidoPrincipal">
 
                         <div class="content" align="center">
-                            
+
                             <h2>Control - BIOMINI</h2> 
                             <p:graphicImage url="/resources/images/finger.png" stream="false" />
                             <br></br>
@@ -84,7 +84,21 @@
                         </h:panelGrid>
                     </h:form>
                 </p:dialog>
+                <script>
+                    //permisos vistas
+                    $(document).on("ready", function () {
+          switch ('#{usuario.nombreRol}') {
 
+                            case 'DOCENTE':
+                            {
+
+                                alert("No tiene suficientes permisos para acceder a esta pagina");
+                                break;
+                            }
+
+                        }
+                    });
+                </script>
             </ui:define> 
 
         </ui:composition>

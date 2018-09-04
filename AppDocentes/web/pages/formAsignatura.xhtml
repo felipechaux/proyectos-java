@@ -83,6 +83,23 @@
 
                 </p:dialog>
 
+                <script>
+                    //permisos vistas
+                    $(document).on("ready", function () {
+                        switch ('#{usuario.nombreRol}') {
+                            
+                            case 'AUXILIAR DE LABORATORIO':
+                            case 'DOCENTE':
+                            {
+
+                                alert("No tiene suficientes permisos para acceder a esta pagina");
+                                break;
+                            }
+
+                        }
+                    });
+                </script>
+
             </ui:define> 
         </ui:composition>
     </h:body>

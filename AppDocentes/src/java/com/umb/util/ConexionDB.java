@@ -19,7 +19,7 @@ public class ConexionDB {
         Connection con = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/bd_app_docentes", "root", "");
+            con = DriverManager.getConnection("jdbc:mysql://localhost/bd_app_docentes", "root", "Xrock666");
 
             // JOptionPane.showMessageDialog(null, "Conexion con base de datos exitosa");
         } catch (ClassNotFoundException e1) {

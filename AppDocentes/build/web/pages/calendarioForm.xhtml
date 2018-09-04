@@ -12,7 +12,7 @@
     <h:body>
         <ui:composition template="../templates/template.xhtml">  
             <ui:define name="content" >
-                
+
                 <br></br>
                 <br></br>
                 <br></br>
@@ -112,7 +112,7 @@
                 <h:form>
                 </h:form>
 
-                <p:confirmDialog header="Confirmation"  message="Desea enviar correo del bloque creado?" widgetVar="confirm" global="true" showEffect="fade" hideEffect="fade">
+                <p:confirmDialog header="Confirmacion"  message="Desea enviar correo del bloque creado?" widgetVar="confirm" global="true" showEffect="fade" hideEffect="fade">
                     <h:form>
                         <p:commandButton  onstart="PF('statusDialog').show();"  action="#{calendario.correo()}" value="Si"  styleClass="ui-confirmdialog-yes" icon="ui-icon-check" oncomplete="PF('confirm').hide();PF('statusDialog').hide();" />
                         <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
@@ -150,6 +150,22 @@
                     </h:form>
 
                 </p:dialog>
+                <script>
+                    //permisos vistas
+                    $(document).on("ready", function () {
+                        switch ('#{usuario.nombreRol}') {
+                            
+                            case 'AUXILIAR DE LABORATORIO':
+                            case 'DOCENTE':
+                            {
+
+                                alert("No tiene suficientes permisos para acceder a esta pagina");
+                                break;
+                            }
+
+                        }
+                    });
+                </script>
             </ui:define> 
         </ui:composition>
     </h:body>

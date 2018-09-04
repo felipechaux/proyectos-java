@@ -20,7 +20,7 @@ public class Correo {
     String CONFIGSET = "ConfigSet";
     String HOST = "smtp.gmail.com"; 
     int PORT = 587;
-    String SUBJECT = "App docentes Reporte";
+    String SUBJECT = "Notificaciones App de Reserva y Prestamo de Aulas de Laboratorio | UMB";
     String message;
 
     public String getMessage() {
@@ -110,5 +110,10 @@ public class Correo {
             System.out.println("Error message: " + ex.getMessage());
             message = "Error " + ex.getMessage();
         }
+    }
+    
+    public void enviarReserva(){
+        //nombre usuario, bloque inicio y fin 
+        System.out.println("enviar correo");
     }
 }
