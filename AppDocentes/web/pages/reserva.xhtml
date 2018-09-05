@@ -113,7 +113,7 @@ and open the template in the editor.
 
                             <p:column headerText="Seleccionar">
                                 <h:form>
-                                    <h:commandLink value="Reservar" action="#{reserva.reservar(b.id,usuario.nombreRol,usuario.id,usuario.nombreUsuario)}"  ></h:commandLink>
+                                    <p:commandLink value="Reservar" action="#{reserva.reservar(b.id,usuario.nombreRol,usuario.id,usuario.nombreUsuario)}" onstart="PF('statusDialog').show();"  oncomplete="PF('statusDialog').hide();" ></p:commandLink>
                                 </h:form>
 
                             </p:column>
@@ -124,13 +124,6 @@ and open the template in the editor.
 
                     </h:panelGrid>
                 </p:dialog>  
-
-                <p:confirmDialog header="Confirmacion"  message="Desea enviar correo del bloque creado?" widgetVar="confirm" global="true" showEffect="fade" hideEffect="fade">
-                    <h:form>
-                        <p:commandButton  onstart="PF('statusDialog').show();"  action="#{calendario.correo()}" value="Si"  styleClass="ui-confirmdialog-yes" icon="ui-icon-check" oncomplete="PF('confirm').hide();PF('statusDialog').hide();" />
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                    </h:form>
-                </p:confirmDialog>
 
                 <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
                     <p:graphicImage  url="/resources/images/ajax-loader.gif" />

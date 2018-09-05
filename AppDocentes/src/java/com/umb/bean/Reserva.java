@@ -9,10 +9,12 @@ import com.umb.dao.Correo;
 import com.umb.dao.ListasDAO;
 import com.umb.dao.ReservaDAO;
 import com.umb.entities.BloqueLaboratorio;
+import com.umb.entities.NombreDisponibilidad;
 import com.umb.entities.ReservaCalendario;
 import com.umb.entities.Servicio;
 import java.io.Serializable;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.faces.application.FacesMessage;
@@ -106,22 +108,33 @@ public class Reserva extends Listas implements Serializable {
         this.idLaboratorio = idLaboratorio;
     }
 
-
-    public void reservar(int idDisponibilidad, String permiso, String id,String usuario) {
+    public void reservar(int idDisponibilidad, String permiso, String id, String usuario) {
 
         System.out.println("permiso reserva " + permiso + " id persona " + id);
         switch (permiso) {
-
+            case "COORDINADOR":
             case "DIRECTOR": {
                 System.out.println("case director");
                 if (idPersona != 0 && idDisponibilidad != 0) {
                     try {
                         ReservaDAO reserva = new ReservaDAO();
-                        reserva.registrarReserva(idPersona, idDisponibilidad, idMateria, "NO");
-                        
+                        if (reserva.registrarReserva(idPersona, idDisponibilidad, idMateria, "NO")) {
+                            // enviarReserva(idDisponibilidad, "NO", usuario);
+                            //envio de correo 
+                            ListasDAO l = new ListasDAO();
+                            NombreDisponibilidad d = (NombreDisponibilidad) l.getLista("NOMBRES_D", idDisponibilidad, "").get(0);
+                            System.out.println("resultado nombres; fecha " + d.getFecha() + " bloque " + d.getBloque() + " laboratorio " + d.getNombreLaboratorio() + " asignatura " + d.getNombreAsignatura());
+
+                            Correo c = new Correo();
+                            c.correoReserva(usuario, d.getFecha(), d.getBloque(), d.getNombreLaboratorio(), d.getNombreAsignatura(), d.getNombrePersonaAsignada());
+
+                            message = new FacesMessage(FacesMessage.SEVERITY_INFO, c.getMessage(), null);
+                            FacesContext.getCurrentInstance().addMessage(null, message);
+                        }
+
                         message = new FacesMessage(FacesMessage.SEVERITY_INFO, reserva.getMessage(), null);
                         FacesContext.getCurrentInstance().addMessage(null, message);
-                        enviarReserva(idPersona,idDisponibilidad,"NO",usuario);
+
                         //recargar listas
                         init();
                     } catch (Exception e) {
@@ -135,14 +148,27 @@ public class Reserva extends Listas implements Serializable {
             case "DOCENTE": {
                 System.out.println("case docente");
                 //reposision
-
                 if (Integer.parseInt(id) != 0 && idDisponibilidad != 0) {
                     try {
                         ReservaDAO reserva = new ReservaDAO();
-                        reserva.registrarReserva(Integer.parseInt(id), idDisponibilidad, idMateria, "SI");
+                        if (reserva.registrarReserva(Integer.parseInt(id), idDisponibilidad, idMateria, "SI")) {
+                            //enviarReserva(idDisponibilidad, "SI", usuario);
+                            //envio de correo 
+                            ListasDAO l = new ListasDAO();
+                            NombreDisponibilidad d = (NombreDisponibilidad) l.getLista("NOMBRES_D", idDisponibilidad, "").get(0);
+                            System.out.println("resultado nombres; fecha " + d.getFecha() + " bloque " + d.getBloque() + " laboratorio " + d.getNombreLaboratorio() + " asignatura " + d.getNombreAsignatura());
+
+                            Correo c = new Correo();
+                            c.correoReserva(usuario, d.getFecha(), d.getBloque(), d.getNombreLaboratorio(), d.getNombreAsignatura(), d.getNombrePersonaAsignada());
+
+                            message = new FacesMessage(FacesMessage.SEVERITY_INFO, c.getMessage(), null);
+                            FacesContext.getCurrentInstance().addMessage(null, message);
+
+                        }
+
                         message = new FacesMessage(FacesMessage.SEVERITY_INFO, reserva.getMessage(), null);
                         FacesContext.getCurrentInstance().addMessage(null, message);
-                        enviarReserva(Integer.parseInt(id),idDisponibilidad,"SI",usuario);
+
                         //recargar listas
                         init();
                     } catch (Exception e) {
@@ -159,24 +185,6 @@ public class Reserva extends Listas implements Serializable {
                 break;
         }
 
-    }
-
-    public void enviarReserva(int idPersona, int idDisponibilidad,String reposicion,String usuarioReserva) throws Exception {
-        //persona, laboratorio, materia
-        //llamada a listasDAO
-        System.out.println("correo reserva!!");
-
-        System.out.println("persona: "+idPersona+" Materia: "+idMateria+" Laboratorio : "+idDisponibilidad+" Reposicion "+reposicion+" bloque "+""+" Usuario reservo "+usuarioReserva);
-        Correo correo = new Correo();
-        correo.enviarReserva();
-
-       // message = new FacesMessage(FacesMessage.SEVERITY_INFO, correo.getMessage(), null);
-       // FacesContext.getCurrentInstance().addMessage(null, message);
-    }
-
-    public void pro(int idDisponibilidad) {
-        System.out.println("persona " + idPersona);
-        System.out.println("disponobilidad " + idDisponibilidad);
     }
 
     @Override

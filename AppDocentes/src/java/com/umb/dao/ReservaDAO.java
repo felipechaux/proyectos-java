@@ -90,11 +90,12 @@ public class ReservaDAO {
         this.message = message;
     }
 
-    public void registrarReserva(int idPersona, int idDisponibilidad, int idMateria, String r) {
+    public boolean registrarReserva(int idPersona, int idDisponibilidad, int idMateria, String r) {
         System.out.println("entra a reservar");
         PreparedStatement ps = null;
         PreparedStatement vl = null;
         ResultSet rs = null;
+        boolean respuesta=false;
         Connection con = ConexionDB.ConnectDB();
 
         if (con != null) {
@@ -114,9 +115,10 @@ public class ReservaDAO {
                             ps.executeUpdate();
                             message = "Reserva realizada";
                             System.out.println("insert exitoso");
+                            respuesta=true;
                             break;
                         case "INACTIVO":
-                            message = "El bloque seleccionado ya se encuentra reservado";
+                            message = "El bloque seleccionado ya se encuentra reservado";         
                             break;
                     }
                 }
@@ -142,6 +144,7 @@ public class ReservaDAO {
             }
 
         }
+        return respuesta;
     }
 
     public ArrayList getDetalleServicios(int idLaboratorio, String tipoServicio) {

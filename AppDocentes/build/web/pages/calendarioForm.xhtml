@@ -114,7 +114,7 @@
 
                 <p:confirmDialog header="Confirmacion"  message="Desea enviar correo del bloque creado?" widgetVar="confirm" global="true" showEffect="fade" hideEffect="fade">
                     <h:form>
-                        <p:commandButton  onstart="PF('statusDialog').show();"  action="#{calendario.correo()}" value="Si"  styleClass="ui-confirmdialog-yes" icon="ui-icon-check" oncomplete="PF('confirm').hide();PF('statusDialog').hide();" />
+                        <p:commandButton  onstart="PF('statusDialog').show();"  action="#{calendario.correo(usuario.nombreUsuario)}" value="Si"  styleClass="ui-confirmdialog-yes" icon="ui-icon-check" oncomplete="PF('confirm').hide();PF('statusDialog').hide();" />
                         <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                     </h:form>
                 </p:confirmDialog>

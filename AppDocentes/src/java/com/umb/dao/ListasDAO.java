@@ -6,7 +6,9 @@
 package com.umb.dao;
 
 import com.umb.entities.Lista;
+import com.umb.entities.NombreDisponibilidad;
 import com.umb.util.ConexionDB;
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -32,14 +34,29 @@ public class ListasDAO {
     private String SELECT_D = "SELECT id_persona,nombre_persona FROM personas WHERE id_rol = (SELECT id_rol FROM roles WHERE nombre_rol ='DOCENTE')";
 
     private String SELECT_L = "SELECT l.id_laboratorio,l.nombre_laboratorio FROM laboratorios l ";
-    
-    //laboratorio desde disponibilidad
 
     private String SELECT_M = "SELECT id_materia,nombre_materia FROM materias WHERE id_unidad=?";
 
     private String SELECT_UA = "SELECT id_unidad,nombre_unidad FROM unidad_academica WHERE id_facultad=? AND tipo_programa=? ";
 
+    private String SELECT_NOMBRES_DISPONIBILIDAD_LABORATORIO = "SELECT d.fecha,d.bloque_ini,d.bloque_fin,l.nombre_laboratorio,m.nombre_materia,p.nombre_persona \n"
+            + " from disponibilidad_laboratorio d\n"
+            + " JOIN laboratorios l\n"
+            + " ON \n"
+            + " d.id_laboratorio=l.id_laboratorio\n"
+            + " JOIN reservas r\n"
+            + " ON d.id_disponibilidad=r.id_disponibilidad\n"
+            + " JOIN materias m\n"
+            + " ON r.id_materia=m.id_materia\n"
+            + "JOIN personas p\n"
+            + " ON r.id_persona=p.id_persona"
+            + " where d.id_disponibilidad=?";
+
     ArrayList<Lista> listaArr;
+
+    ArrayList<NombreDisponibilidad> nombreDisponibilidadArr;
+
+    NombreDisponibilidad nombredisponibilidadreturn;
 
     Lista listareturn;
 
@@ -51,6 +68,7 @@ public class ListasDAO {
         if (con != null) {
             try {
                 listaArr = new ArrayList<>();
+
                 switch (type) {
                     case "LF": {
                         ps = con.prepareStatement(SELECT_F);
@@ -149,6 +167,24 @@ public class ListasDAO {
                             listaArr.add(listareturn);
                         }
                         break;
+                    }
+                    case "NOMBRES_D": {
+                        nombreDisponibilidadArr = new ArrayList();
+                        ps = con.prepareStatement(SELECT_NOMBRES_DISPONIBILIDAD_LABORATORIO);
+                        ps.setInt(1, value);
+                        rs = ps.executeQuery();
+                        while (rs.next()) {
+                            System.out.println("nombres disponibilidad");
+                            //System.out.println("fecha :"+rs.getString(1)+"  bloque :"+rs.getString(2)+" - "+rs.getString(3)+" Laboratorio :"+rs.getString(4)+" Asignatura: "+rs.getString(5));
+                            nombredisponibilidadreturn = new NombreDisponibilidad();
+                            nombredisponibilidadreturn.setFecha(rs.getString(1));
+                            nombredisponibilidadreturn.setBloque(rs.getString(2) + " - " + rs.getString(3));
+                            nombredisponibilidadreturn.setNombreLaboratorio(rs.getString(4));
+                            nombredisponibilidadreturn.setNombreAsignatura(rs.getString(5));
+                            nombredisponibilidadreturn.setNombrePersonaAsignada(rs.getString(6));
+                            nombreDisponibilidadArr.add(nombredisponibilidadreturn);
+                        }
+                        return nombreDisponibilidadArr;
                     }
                 }
 
