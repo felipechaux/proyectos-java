@@ -69,9 +69,9 @@ public class ScheduleView extends Reserva implements Serializable {
 
             if (disponibilidad.size() > 0) {
                 rc.execute("PF('disponibilidadDialog').show()");
-                for (int i = 0; i < disponibilidad.size(); i++) {
-                    System.out.println("dates " + disponibilidad.get(i));
-                    eventModel.addEvent(new DefaultScheduleEvent("DISPONIBLE", disponibilidad.get(i), new Date()));
+                for (Date disponibilidad1 : disponibilidad) {
+                 //  System.out.println("dates " + disponibilidad1);
+                    eventModel.addEvent(new DefaultScheduleEvent("DISPONIBLE", disponibilidad1, new Date()));
                 }
 
             } else {
@@ -91,9 +91,9 @@ public class ScheduleView extends Reserva implements Serializable {
 
         if (disponibilidad.size() > 0) {
 
-            for (int i = 0; i < disponibilidad.size(); i++) {
-                System.out.println("dates " + disponibilidad.get(i));
-                eventModel.addEvent(new DefaultScheduleEvent("RESERVAS", disponibilidad.get(i), new Date()));
+            for (Date disponibilidad1 : disponibilidad) {
+               // System.out.println("dates " + disponibilidad1);
+                eventModel.addEvent(new DefaultScheduleEvent("RESERVAS", disponibilidad1, new Date()));
             }
 
         } else {

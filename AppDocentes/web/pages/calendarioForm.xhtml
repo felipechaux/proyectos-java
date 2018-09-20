@@ -29,6 +29,7 @@
                             <h:form id="form">
 
                                 <p:growl id="msg" autoUpdate="true" />  
+                                <h2><strong>Creacion de bloque :</strong></h2>
                                 <br></br>
                                 <br></br>
                                 <br></br> 
@@ -60,7 +61,7 @@
                                 <p:panel>
 
 
-                                    <p:dataTable id="bloques" paginator="true" rows="5" value="#{calendario.bloques}" var="b" style="width:570px;font-size: x-small;" selectionMode="single" selection="#{calendario.selectedBloque}" rowKey="#{b.id}" >
+                                    <p:dataTable id="bloques" paginator="true" rows="5" value="#{calendario.bloques}" var="b" style="margin-bottom:0;" selectionMode="single" selection="#{calendario.selectedBloque}" rowKey="#{b.id}" >
 
                                         <p:column headerText="Fecha"  sortBy="#{b.fecha}" >
                                             <h:outputText value="#{b.fecha}"  />

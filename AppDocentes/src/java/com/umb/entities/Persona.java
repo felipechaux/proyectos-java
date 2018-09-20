@@ -13,10 +13,18 @@ public class Persona {
 
     private int unidadAcademica, facultad, rol;
 
-    private String nombreUsuario, programa, id, clave,nombreRol;
+    private String nombreUsuario, programa, id, clave,nombreRol,email;
 
     private boolean session;
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
     public String getClave() {
         return clave;
     }

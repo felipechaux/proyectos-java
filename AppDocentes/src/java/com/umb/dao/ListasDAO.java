@@ -33,13 +33,13 @@ public class ListasDAO {
 
     private String SELECT_D = "SELECT id_persona,nombre_persona FROM personas WHERE id_rol = (SELECT id_rol FROM roles WHERE nombre_rol ='DOCENTE')";
 
-    private String SELECT_L = "SELECT l.id_laboratorio,l.nombre_laboratorio FROM laboratorios l ";
+    private String SELECT_L = "SELECT l.id_laboratorio,l.nombre_laboratorio,l.cantidad_pcs FROM laboratorios l ";
 
-    private String SELECT_M = "SELECT id_materia,nombre_materia FROM materias WHERE id_unidad=?";
+    private String SELECT_M = "SELECT id_materia,nombre_materia FROM materias WHERE id_unidad=? ORDER BY nombre_materia";
 
     private String SELECT_UA = "SELECT id_unidad,nombre_unidad FROM unidad_academica WHERE id_facultad=? AND tipo_programa=? ";
 
-    private String SELECT_NOMBRES_DISPONIBILIDAD_LABORATORIO = "SELECT d.fecha,d.bloque_ini,d.bloque_fin,l.nombre_laboratorio,m.nombre_materia,p.nombre_persona \n"
+    private String SELECT_NOMBRES_DISPONIBILIDAD_LABORATORIO = "SELECT d.fecha,d.bloque_ini,d.bloque_fin,l.nombre_laboratorio,m.nombre_materia,p.nombre_persona,p.email \n"
             + " from disponibilidad_laboratorio d\n"
             + " JOIN laboratorios l\n"
             + " ON \n"
@@ -51,6 +51,9 @@ public class ListasDAO {
             + "JOIN personas p\n"
             + " ON r.id_persona=p.id_persona"
             + " where d.id_disponibilidad=?";
+
+    //grupos laboratorio
+    private String SELECT_G = " SELECT id_grupo_laboratorio,nombre_grupo FROM grupo_laboratorio WHERE id_laboratorio=? ";
 
     ArrayList<Lista> listaArr;
 
@@ -127,6 +130,7 @@ public class ListasDAO {
                             listareturn = new Lista();
                             listareturn.setId(rs.getInt(1));
                             listareturn.setValor(rs.getString(2));
+                            listareturn.setCantidad(rs.getInt(3));
                             listaArr.add(listareturn);
                         }
                         break;
@@ -168,6 +172,21 @@ public class ListasDAO {
                         }
                         break;
                     }
+                    // grupos laboratorio
+                    case "LGL": {
+                        ps = con.prepareStatement(SELECT_G);
+                        ps.setInt(1, value);
+                        rs = ps.executeQuery();
+                        while (rs.next()) {
+                            System.out.println("grupos ---");
+                            listareturn = new Lista();
+                            System.out.println("id " + rs.getInt(1) + " nombre " + rs.getString(2));
+                            listareturn.setId(rs.getInt(1));
+                            listareturn.setValor(rs.getString(2));
+                            listaArr.add(listareturn);
+                        }
+                        break;
+                    }
                     case "NOMBRES_D": {
                         nombreDisponibilidadArr = new ArrayList();
                         ps = con.prepareStatement(SELECT_NOMBRES_DISPONIBILIDAD_LABORATORIO);
@@ -182,10 +201,12 @@ public class ListasDAO {
                             nombredisponibilidadreturn.setNombreLaboratorio(rs.getString(4));
                             nombredisponibilidadreturn.setNombreAsignatura(rs.getString(5));
                             nombredisponibilidadreturn.setNombrePersonaAsignada(rs.getString(6));
+                            nombredisponibilidadreturn.setEmailPersonaAsignada(rs.getString(7));
                             nombreDisponibilidadArr.add(nombredisponibilidadreturn);
                         }
                         return nombreDisponibilidadArr;
                     }
+
                 }
 
             } catch (SQLException ex) {

@@ -17,7 +17,7 @@
                     <br></br>
                     <br></br>
                     <h:form>
-                        <p:dataTable  id="r-asistencia" value="#{asistencia.asistencias}" var="a" paginator="true" rows="5" style="width:1100px;font-size: x-small;" >
+                        <p:dataTable  id="r-asistencia" value="#{asistencia.asistencias}" var="a" paginator="true" rows="5" style="margin-bottom:0;" >
 
 
                             <p:column headerText="Docente" sortBy="#{a.nombrePersona}"  >
@@ -47,8 +47,8 @@
                             <p:column headerText="Auxiliar encargado - salida"  >
                                 <h:outputText value="#{a.personaEncargadaSalida}"  />
                             </p:column>
-                            <p:column headerText="Reposicion" sortBy="#{a.reposicion}" >
-                                <h:outputText value="#{a.reposicion}"  />
+                            <p:column headerText="Tipo de reserva " sortBy="#{a.tipoReserva}" >
+                                <h:outputText value="#{a.tipoReserva}"  />
                             </p:column>
                             <p:column headerText="Fecha"  >
                                 <h:outputText value="#{a.fecha}"  />

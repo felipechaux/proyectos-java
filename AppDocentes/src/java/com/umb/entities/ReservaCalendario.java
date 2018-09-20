@@ -10,8 +10,34 @@ package com.umb.entities;
  * @author Administrador
  */
 public class ReservaCalendario {
+
+    private int idReserva,cantidadEstudiantes;
+
+    private String nombreUsuario, bloque, nombreLaboratorio, nombreMateria, tipoReserva, observacion;
+
+    public int getIdReserva() {
+        return idReserva;
+    }
+
+    public void setIdReserva(int idReserva) {
+        this.idReserva = idReserva;
+    }
     
-    private String nombreUsuario,bloque,nombreLaboratorio,nombreMateria,reposicion;
+    public int getCantidadEstudiantes() {
+        return cantidadEstudiantes;
+    }
+
+    public void setCantidadEstudiantes(int cantidadEstudiantes) {
+        this.cantidadEstudiantes = cantidadEstudiantes;
+    }
+
+    public String getObservacion() {
+        return observacion;
+    }
+
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
+    }
 
     public String getNombreUsuario() {
         return nombreUsuario;
@@ -45,12 +71,12 @@ public class ReservaCalendario {
         this.nombreMateria = nombreMateria;
     }
 
-    public String getReposicion() {
-        return reposicion;
+    public String getTipoReserva() {
+        return tipoReserva;
     }
 
-    public void setReposicion(String reposicion) {
-        this.reposicion = reposicion;
+    public void setTipoReserva(String tipoReserva) {
+        this.tipoReserva = tipoReserva;
     }
-    
+
 }

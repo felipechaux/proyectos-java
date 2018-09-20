@@ -9,6 +9,7 @@ import com.umb.dao.Correo;
 import com.umb.dao.ListasDAO;
 import com.umb.dao.ReservaDAO;
 import com.umb.entities.BloqueLaboratorio;
+import com.umb.entities.Lista;
 import com.umb.entities.NombreDisponibilidad;
 import com.umb.entities.ReservaCalendario;
 import com.umb.entities.Servicio;
@@ -34,15 +35,47 @@ public class Reserva extends Listas implements Serializable {
 
     private Date fecha;
 
-    private int idPersona, idLaboratorio, idMateria;
+    private int idPersona, idLaboratorio, idMateria, cantidadEquipos, cantidadEstudiantes, idGrupoLaboratorio;
 
     private List<Servicio> servicios;
 
-    private String tipoServicio;
+    private String tipoServicio, tipoReserva, observacion, nombreGrupo;
 
     private List<BloqueLaboratorio> bloques;
 
     private List<ReservaCalendario> reservasCalendario;
+
+    private List<ReservaCalendario> selectedReservas;
+
+    ReservaDAO reserva;
+
+    public Reserva() {
+        reserva = new ReservaDAO();
+    }
+
+    public List<ReservaCalendario> getSelectedReservas() {
+        return selectedReservas;
+    }
+
+    public void setSelectedReservas(List<ReservaCalendario> selectedReservas) {
+        this.selectedReservas = selectedReservas;
+    }
+
+    public int getCantidadEstudiantes() {
+        return cantidadEstudiantes;
+    }
+
+    public void setCantidadEstudiantes(int cantidadEstudiantes) {
+        this.cantidadEstudiantes = cantidadEstudiantes;
+    }
+
+    public int getIdGrupoLaboratorio() {
+        return idGrupoLaboratorio;
+    }
+
+    public void setIdGrupoLaboratorio(int idGrupoLaboratorio) {
+        this.idGrupoLaboratorio = idGrupoLaboratorio;
+    }
 
     public List<ReservaCalendario> getReservasCalendario() {
         return reservasCalendario;
@@ -50,6 +83,38 @@ public class Reserva extends Listas implements Serializable {
 
     public void setReservasCalendario(List<ReservaCalendario> reservasCalendario) {
         this.reservasCalendario = reservasCalendario;
+    }
+
+    public String getNombreGrupo() {
+        return nombreGrupo;
+    }
+
+    public void setNombreGrupo(String nombreGrupo) {
+        this.nombreGrupo = nombreGrupo;
+    }
+
+    public int getCantidadEquipos() {
+        return cantidadEquipos;
+    }
+
+    public void setCantidadEquipos(int cantidadEquipos) {
+        this.cantidadEquipos = cantidadEquipos;
+    }
+
+    public String getObservacion() {
+        return observacion;
+    }
+
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
+    }
+
+    public String getTipoReserva() {
+        return tipoReserva;
+    }
+
+    public void setTipoReserva(String tipoReserva) {
+        this.tipoReserva = tipoReserva;
     }
 
     public String getTipoServicio() {
@@ -108,6 +173,19 @@ public class Reserva extends Listas implements Serializable {
         this.idLaboratorio = idLaboratorio;
     }
 
+    public void crearGrupo() {
+        System.out.println("hola creacion grupo idlab : " + idLaboratorio + " nombre grupo : " + nombreGrupo);
+        if (idLaboratorio != 0 && nombreGrupo != null) {
+            reserva.registrarGrupoLaboratorio(nombreGrupo, idLaboratorio);
+
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, reserva.getMessage(), null);
+            FacesContext.getCurrentInstance().addMessage(null, message);
+
+            //recargar 
+            cargarGruposLaboratorio();
+        }
+    }
+
     public void reservar(int idDisponibilidad, String permiso, String id, String usuario) {
 
         System.out.println("permiso reserva " + permiso + " id persona " + id);
@@ -117,8 +195,8 @@ public class Reserva extends Listas implements Serializable {
                 System.out.println("case director");
                 if (idPersona != 0 && idDisponibilidad != 0) {
                     try {
-                        ReservaDAO reserva = new ReservaDAO();
-                        if (reserva.registrarReserva(idPersona, idDisponibilidad, idMateria, "NO")) {
+
+                        if (reserva.registrarReserva(idPersona, idDisponibilidad, idMateria, tipoReserva, observacion, cantidadEstudiantes, idGrupoLaboratorio)) {
                             // enviarReserva(idDisponibilidad, "NO", usuario);
                             //envio de correo 
                             ListasDAO l = new ListasDAO();
@@ -126,7 +204,7 @@ public class Reserva extends Listas implements Serializable {
                             System.out.println("resultado nombres; fecha " + d.getFecha() + " bloque " + d.getBloque() + " laboratorio " + d.getNombreLaboratorio() + " asignatura " + d.getNombreAsignatura());
 
                             Correo c = new Correo();
-                            c.correoReserva(usuario, d.getFecha(), d.getBloque(), d.getNombreLaboratorio(), d.getNombreAsignatura(), d.getNombrePersonaAsignada());
+                            c.correoReserva(usuario, d.getFecha(), d.getBloque(), d.getNombreLaboratorio(), d.getNombreAsignatura(), d.getNombrePersonaAsignada(), d.getEmailPersonaAsignada());
 
                             message = new FacesMessage(FacesMessage.SEVERITY_INFO, c.getMessage(), null);
                             FacesContext.getCurrentInstance().addMessage(null, message);
@@ -150,8 +228,8 @@ public class Reserva extends Listas implements Serializable {
                 //reposision
                 if (Integer.parseInt(id) != 0 && idDisponibilidad != 0) {
                     try {
-                        ReservaDAO reserva = new ReservaDAO();
-                        if (reserva.registrarReserva(Integer.parseInt(id), idDisponibilidad, idMateria, "SI")) {
+                        //restringir tipos de reservas!!
+                        if (reserva.registrarReserva(Integer.parseInt(id), idDisponibilidad, idMateria, tipoReserva, observacion, cantidadEstudiantes, idGrupoLaboratorio)) {
                             //enviarReserva(idDisponibilidad, "SI", usuario);
                             //envio de correo 
                             ListasDAO l = new ListasDAO();
@@ -159,7 +237,7 @@ public class Reserva extends Listas implements Serializable {
                             System.out.println("resultado nombres; fecha " + d.getFecha() + " bloque " + d.getBloque() + " laboratorio " + d.getNombreLaboratorio() + " asignatura " + d.getNombreAsignatura());
 
                             Correo c = new Correo();
-                            c.correoReserva(usuario, d.getFecha(), d.getBloque(), d.getNombreLaboratorio(), d.getNombreAsignatura(), d.getNombrePersonaAsignada());
+                            c.correoReserva(usuario, d.getFecha(), d.getBloque(), d.getNombreLaboratorio(), d.getNombreAsignatura(), d.getNombrePersonaAsignada(), d.getEmailPersonaAsignada());
 
                             message = new FacesMessage(FacesMessage.SEVERITY_INFO, c.getMessage(), null);
                             FacesContext.getCurrentInstance().addMessage(null, message);
@@ -199,7 +277,36 @@ public class Reserva extends Listas implements Serializable {
 
     }
 
+    public void modificarReserva() {
+
+        System.out.println("update id ; " + idPersona + " ; tipo de reserva " + tipoReserva + " ; idmateria " + idMateria + " ; cantidad estudiantes " + cantidadEstudiantes);
+
+        for (ReservaCalendario selectedReserva : selectedReservas) {
+            reserva.modificarReserva(idPersona, tipoReserva, idMateria, cantidadEstudiantes, selectedReserva.getIdReserva());
+            System.out.println("salida : id " + selectedReserva.getIdReserva() + " ; user " + selectedReserva.getNombreUsuario());
+        }
+        message = new FacesMessage(FacesMessage.SEVERITY_WARN, reserva.getMessage(), null);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+
+    }
+
+    public void cargarReservas() {
+
+        setReservasCalendario(reserva.getReservaCalendario(null));
+
+    }
+
+    public void cargarGruposLaboratorio() {
+        ListasDAO listas = new ListasDAO();
+
+        if (idLaboratorio != 0) {
+            this.setListaG(listas.getLista("LGL", idLaboratorio, null));
+        }
+
+    }
+
     public void cargarMaterias(int idUnidad) {
+        System.out.println("listas materias");
 
         if (idUnidad != 0) {
             ListasDAO listas = new ListasDAO();
@@ -208,9 +315,25 @@ public class Reserva extends Listas implements Serializable {
 
     }
 
+    public void cargarCantidad(int id) {
+        ListasDAO listas = new ListasDAO();
+        ArrayList lab = listas.getLista("LL", Types.INTEGER, null);
+
+        for (Object item : lab) {
+            Lista l = (Lista) item;
+            if (id == l.getId()) {
+                System.out.println(" cantidad " + l.getCantidad());
+                cantidadEquipos = l.getCantidad();
+            }
+
+        }
+
+    }
+
     public void cargarServicios(int idLaboratorio) {
         System.out.println("cargue servicios ");
         System.out.println("id" + idLaboratorio + " tipo" + tipoServicio);
+
         if (idLaboratorio != 0 && tipoServicio != null) {
             System.out.println("entra ");
             ReservaDAO detalle = new ReservaDAO();

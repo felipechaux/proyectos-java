@@ -77,7 +77,7 @@ public class Correo {
 
     }
 
-    public void correoReserva(String usuarioReserva, String fecha, String bloque, String laboratorio, String asignatura, String personaAsignada) {
+    public void correoReserva(String usuarioReserva, String fecha, String bloque, String laboratorio, String asignatura, String personaAsignada, String emailPersonaAsignada) {
         //nombre usuario, bloque inicio y fin 
         System.out.println("enviar correo");
 
@@ -88,7 +88,7 @@ public class Correo {
                 + "\n"
                 + "  <tr>\n"
                 + "    <td style=\"border: 1px solid black\"><strong>USUARIO ASIGNADO</strong></td>\n"
-                + "    <td style=\"border: 1px solid black\"><strong><a href='mailto:felchax@gmail.com'>" + personaAsignada + "</a></strong></td>\n"
+                + "    <td style=\"border: 1px solid black\"><strong><a href='mailto:"+emailPersonaAsignada+"'>" + personaAsignada + "</a></strong></td>\n"
                 + "\n"
                 + "  </tr>\n"
                 + "  <tr>\n"

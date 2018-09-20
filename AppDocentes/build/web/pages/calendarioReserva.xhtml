@@ -49,9 +49,16 @@
                                     <p:column headerText="Materia">
                                         <h:outputText value="#{r.nombreMateria}"  />
                                     </p:column>
-                                    <p:column headerText="Reposicion">
-                                        <h:outputText value="#{r.reposicion}"  />
+                                    <p:column headerText="Tipo de reserva">
+                                        <h:outputText value="#{r.tipoReserva}"  />
                                     </p:column>
+                                    <p:column headerText="Observacion">
+                                        <h:outputText value="#{r.observacion}"  />
+                                    </p:column>
+                                    <p:column headerText="Cantidad estudiantes">
+                                        <h:outputText value="#{r.cantidadEstudiantes}"  />
+                                    </p:column>
+
 
                                 </p:dataTable>
                                 <h:commandLink id="expor-excel" rendered="#{not empty scheduleView.reservasCalendario}" style="text-align: center;margin-left: 32%;" title="Exportar" value="Exportar">
@@ -68,7 +75,7 @@
                     </h:panelGrid>
 
                 </p:layoutUnit>
-    
+
                 <script>
 
                     $(document).on("ready", function () {

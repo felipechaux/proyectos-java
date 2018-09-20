@@ -27,9 +27,13 @@ import java.util.logging.Logger;
  */
 public class ReservaDAO {
 
-    private String INSERT = "INSERT INTO reservas(id_persona,id_disponibilidad,reposicion,id_materia) VALUES(?,?,?,?)";
+    private String INSERT = "INSERT INTO reservas(id_persona,id_disponibilidad,tipo_reserva,id_materia,observacion,cantidad_estudiantes,id_grupo_laboratorio) VALUES(?,?,?,?,?,?,?)";
 
+    private String UPDATE_R="update reservas SET id_persona=?,tipo_reserva=?,id_materia=?,cantidad_estudiantes=? WHERE id_reserva=? ";
+    
     private String INSERT_P = "INSERT INTO control_prestamo(id_reserva,hora_entrada,observacion,id_persona_encargada_e) VALUES(?,?,?,?)";
+    //grupo laboratorio
+    private String INSERT_G = "INSERT INTO grupo_laboratorio(nombre_grupo,id_laboratorio) VALUES (?,?)";
 
     private String VALIDACION_INSERT_P = "SELECT * FROM control_prestamo WHERE id_reserva=? AND hora_entrada IS NOT NULL AND hora_salida IS NULL";
 
@@ -47,7 +51,9 @@ public class ReservaDAO {
     //all reservas calendario
     private String SELECT_RC = "SELECT DISTINCT(d.fecha) FROM reservas r JOIN disponibilidad_laboratorio d ON r.id_disponibilidad=d.id_disponibilidad WHERE d.fecha >=CURDATE()";
     //reserva persona
-    private String SELECT_RP = "SELECT p.nombre_persona,d.bloque_ini,d.bloque_fin,l.nombre_laboratorio,m.nombre_materia,r.reposicion FROM reservas r JOIN disponibilidad_laboratorio d ON r.id_disponibilidad=d.id_disponibilidad JOIN personas p ON r.id_persona=p.id_persona JOIN materias m ON r.id_materia=m.id_materia  JOIN laboratorios l ON d.id_laboratorio=l.id_laboratorio WHERE d.fecha=?";
+    private String SELECT_RP = "SELECT p.nombre_persona,d.bloque_ini,d.bloque_fin,l.nombre_laboratorio,m.nombre_materia,r.tipo_reserva,r.observacion,r.cantidad_estudiantes FROM reservas r JOIN disponibilidad_laboratorio d ON r.id_disponibilidad=d.id_disponibilidad JOIN personas p ON r.id_persona=p.id_persona JOIN materias m ON r.id_materia=m.id_materia  JOIN laboratorios l ON d.id_laboratorio=l.id_laboratorio WHERE d.fecha=?";
+
+    private String SELECT_RESERVAS = "SELECT p.nombre_persona,d.bloque_ini,d.bloque_fin,l.nombre_laboratorio,m.nombre_materia,r.tipo_reserva,r.observacion,r.cantidad_estudiantes,r.id_reserva FROM reservas r JOIN disponibilidad_laboratorio d ON r.id_disponibilidad=d.id_disponibilidad JOIN personas p ON r.id_persona=p.id_persona JOIN materias m ON r.id_materia=m.id_materia  JOIN laboratorios l ON d.id_laboratorio=l.id_laboratorio";
 
     Date fechaActual;
 
@@ -90,12 +96,54 @@ public class ReservaDAO {
         this.message = message;
     }
 
-    public boolean registrarReserva(int idPersona, int idDisponibilidad, int idMateria, String r) {
+    public boolean registrarGrupoLaboratorio(String nombreGrupo, int idLaboratorio) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        boolean respuesta = false;
+        Connection con = ConexionDB.ConnectDB();
+
+        if (con != null) {
+            try {
+
+                ps = con.prepareStatement(INSERT_G);
+                ps.setString(1, nombreGrupo);
+                ps.setInt(2, idLaboratorio);
+                ps.executeUpdate();
+                message = "Grupo creado";
+                System.out.println("insert exitoso");
+                respuesta = true;
+
+            } catch (SQLException ex) {
+                Logger.getLogger(ReservaDAO.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
+                message = "error " + ex.getMessage();
+            } finally {
+                // Cerrar todas las conexiones. Limpiar los recursos
+                try {
+                    if (ps != null) {
+                        ps.close();
+                    }
+                    if (con != null) {
+                        con.close();
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(ReservaDAO.class.getName()).log(Level.SEVERE, null, ex);
+                    ex.printStackTrace();
+                    message = "error " + ex.getMessage();
+                }
+            }
+
+        }
+
+        return respuesta;
+    }
+
+    public boolean registrarReserva(int idPersona, int idDisponibilidad, int idMateria, String r, String observacion, int cantidadEstudiantes, int idGrupoLaboratorio) {
         System.out.println("entra a reservar");
         PreparedStatement ps = null;
         PreparedStatement vl = null;
         ResultSet rs = null;
-        boolean respuesta=false;
+        boolean respuesta = false;
         Connection con = ConexionDB.ConnectDB();
 
         if (con != null) {
@@ -112,13 +160,22 @@ public class ReservaDAO {
                             ps.setInt(2, idDisponibilidad);
                             ps.setString(3, r);
                             ps.setInt(4, idMateria);
+                            ps.setString(5, observacion);
+                            ps.setInt(6, cantidadEstudiantes);
+
+                            if (idGrupoLaboratorio != 0) {
+                                ps.setInt(7, idGrupoLaboratorio);
+                            } else {
+                                ps.setNull(7, Types.INTEGER);
+                            }
+
                             ps.executeUpdate();
                             message = "Reserva realizada";
                             System.out.println("insert exitoso");
-                            respuesta=true;
+                            respuesta = true;
                             break;
                         case "INACTIVO":
-                            message = "El bloque seleccionado ya se encuentra reservado";         
+                            message = "El bloque seleccionado ya se encuentra reservado";
                             break;
                     }
                 }
@@ -145,6 +202,48 @@ public class ReservaDAO {
 
         }
         return respuesta;
+    }
+
+    public void modificarReserva(int idPersona,String tipoReserva, int idMateria, int cantidadEstudiantes, int idReserva) {
+        System.out.println("entra a modificar reserva");
+        PreparedStatement ps = null;
+        Connection con = ConexionDB.ConnectDB();
+        if (con != null) {
+            try {
+
+                ps = con.prepareStatement(UPDATE_R);
+                ps.setInt(1,idPersona);
+                ps.setString(2,tipoReserva);
+                ps.setInt(3, idMateria);
+                ps.setInt(4, cantidadEstudiantes);
+                
+                ps.setInt(5, idReserva);
+
+                ps.executeUpdate();
+                message = "Modificacion realizada";
+                System.out.println("update exitoso");
+
+            } catch (SQLException ex) {
+                Logger.getLogger(ReservaDAO.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
+                message = "error " + ex.getMessage();
+            } finally {
+                // Cerrar todas las conexiones. Limpiar los recursos
+                try {
+                    if (ps != null) {
+                        ps.close();
+                    }
+                    if (con != null) {
+                        con.close();
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(ReservaDAO.class.getName()).log(Level.SEVERE, null, ex);
+                    ex.printStackTrace();
+                    message = "error " + ex.getMessage();
+                }
+            }
+
+        }
     }
 
     public ArrayList getDetalleServicios(int idLaboratorio, String tipoServicio) {
@@ -292,14 +391,19 @@ public class ReservaDAO {
     }
 
     public ArrayList getReservaCalendario(String fecha) {
+        System.out.println("cargar r");
         PreparedStatement ps = null;
         ResultSet rs = null;
         Connection con = ConexionDB.ConnectDB();
         if (con != null) {
             try {
                 reservaCalendarioArr = new ArrayList<>();
-                ps = con.prepareStatement(SELECT_RP);
-                ps.setString(1, fecha);
+                if (fecha != null) {
+                    ps = con.prepareStatement(SELECT_RP);
+                    ps.setString(1, fecha);
+                } else {
+                    ps = con.prepareStatement(SELECT_RESERVAS);
+                }
                 rs = ps.executeQuery();
 
                 while (rs.next()) {
@@ -309,7 +413,12 @@ public class ReservaDAO {
                     rcreturn.setBloque(tiempoFormat.format(rs.getTime(2)) + " - " + tiempoFormat.format(rs.getTime(3)));
                     rcreturn.setNombreLaboratorio(rs.getString(4));
                     rcreturn.setNombreMateria(rs.getString(5));
-                    rcreturn.setReposicion(rs.getString(6));
+                    rcreturn.setTipoReserva(rs.getString(6));
+                    rcreturn.setObservacion(rs.getString(7));
+                    rcreturn.setCantidadEstudiantes(rs.getInt(8));
+                    if (fecha == null) {
+                        rcreturn.setIdReserva(rs.getInt(9));
+                    }
                     reservaCalendarioArr.add(rcreturn);
 
                 }
@@ -393,7 +502,6 @@ public class ReservaDAO {
 
         PreparedStatement ps = null;
         ResultSet rs = null;
-        boolean respuesta = false;
         Connection con = ConexionDB.ConnectDB();
         if (con != null) {
             try {
@@ -571,7 +679,7 @@ public class ReservaDAO {
 
                         psu.executeUpdate();
                         message = "Entrega realizada";
-                    }else{
+                    } else {
                         System.out.println("no salida");
                         message = "Debe entregar en el tiempo estimado, (Entrega no realizada)";
                     }

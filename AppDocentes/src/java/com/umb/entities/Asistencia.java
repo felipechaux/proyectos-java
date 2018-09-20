@@ -11,7 +11,7 @@ package com.umb.entities;
  */
 public class Asistencia {
     
-    private String nombrePersona,materia,laboratorio,bloque,horaEntrada,horaSalida,observacion,personaEncargadaEntrada,personaEncargadaSalida,reposicion,fecha;
+    private String nombrePersona,materia,laboratorio,bloque,horaEntrada,horaSalida,observacion,personaEncargadaEntrada,personaEncargadaSalida,tipoReserva,fecha;
 
     public String getNombrePersona() {
         return nombrePersona;
@@ -93,13 +93,15 @@ public class Asistencia {
         this.fecha = fecha;
     }
 
-    public String getReposicion() {
-        return reposicion;
+    public String getTipoReserva() {
+        return tipoReserva;
     }
 
-    public void setReposicion(String reposicion) {
-        this.reposicion = reposicion;
+    public void setTipoReserva(String tipoReserva) {
+        this.tipoReserva = tipoReserva;
     }
+
+    
     
     
     

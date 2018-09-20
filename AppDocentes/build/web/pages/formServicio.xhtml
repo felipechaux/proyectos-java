@@ -15,6 +15,7 @@
                               styleClass="pLayoutContenidoPrincipal" >
                     <h:form id="form-servicio">
                         <p:growl id="msg" autoUpdate="true" />  
+                        <h2><strong>Creacion de servicio tecnologico :</strong></h2>
                         <br></br>
                         <br></br>
                         <br></br> 
@@ -40,15 +41,6 @@
                             </p:selectOneMenu>
                             <p:message for="laboratorio" />
 
-                            <p:outputLabel for="tipo-servicio" value="Tipo de servicio :" />
-                            <p:selectOneMenu id="tipo-servicio" required="true" requiredMessage="Tipo de servicio requerido" style="width:300px;"
-                                             autoWidth="false" value="#{servicio.tipoServicio}">
-                                <f:selectItem itemLabel="Seleccione un tipo" itemValue="" />
-                                <f:selectItem itemLabel="SOFTWARE" itemValue="SOFTWARE" />
-                                <f:selectItem itemLabel="HARDWARE" itemValue="HARDWARE" />
-                            </p:selectOneMenu>
-                            <p:message for="tipo-servicio" />
-
                             <p:commandButton value="Guardar" action="#{servicio.crearServicio()}" update="servicios"/>
 
                         </h:panelGrid>
@@ -56,7 +48,7 @@
                         <br></br> 
                         <p:panel >
 
-                            <p:dataTable id="servicios" paginator="true" rows="5" value="#{servicio.servicios}" var="s" style="width:570px;font-size: x-small;" selectionMode="single" selection="#{servicio.selectedServicio}" rowKey="#{s.idServicio}" >
+                            <p:dataTable id="servicios" paginator="true" rows="5" value="#{servicio.servicios}" var="s" style="margin-bottom:0;" selectionMode="single" selection="#{servicio.selectedServicio}" rowKey="#{s.idServicio}" >
 
                                 <p:column headerText="Nombre"  sortBy="#{s.nombre}" >
                                     <h:outputText value="#{s.nombre}"  />
@@ -129,7 +121,7 @@
                     //permisos vistas
                     $(document).on("ready", function () {
                         switch ('#{usuario.nombreRol}') {
-                           
+
                             case 'AUXILIAR DE LABORATORIO':
                             case 'DOCENTE':
                             {

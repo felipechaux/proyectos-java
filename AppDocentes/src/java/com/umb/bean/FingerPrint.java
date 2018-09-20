@@ -451,12 +451,12 @@ public class FingerPrint extends Persona implements Serializable {
 
         System.out.println("Crear cuenta  ");
 
-        if (this.getNombreUsuario() != null && this.getId() != null && this.getClave() != null && this.getRol() != 0) {
+        if (this.getNombreUsuario() != null && this.getId() != null && this.getClave() != null && this.getRol() != 0 &&this.getEmail()!=null ) {
             System.out.println("INSERT");
             try {
                 UsuarioDAO crear = new UsuarioDAO();
 
-                if (crear.registrarUsuario(this.getId(), this.getClave(), this.getNombreUsuario(), this.getUnidadAcademica(), this.getRol()) == true) {
+                if (crear.registrarUsuario(this.getId(), this.getClave(), this.getNombreUsuario(), this.getUnidadAcademica(), this.getRol(),this.getEmail()) == true) {
                     rc.execute("finger('crear')");
 
                 }

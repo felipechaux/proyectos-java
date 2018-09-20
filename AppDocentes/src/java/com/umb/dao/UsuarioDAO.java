@@ -23,11 +23,11 @@ import java.util.logging.Logger;
  */
 public class UsuarioDAO {
 
-    private String INSERT = "INSERT INTO personas(id_persona,password,nombre_persona,id_unidad,id_rol) VALUES(?,?,?,?,?)";
+    private String INSERT = "INSERT INTO personas(id_persona,password,nombre_persona,id_unidad,id_rol,email) VALUES(?,?,?,?,?,?)";
 
-    private String SELECT_P = "SELECT p.id_persona,p.nombre_persona,p.id_unidad,r.nombre_rol FROM personas p JOIN roles r ON p.id_rol=r.id_rol WHERE id_persona=? AND password=?";
+    private String SELECT_P = "SELECT p.id_persona,p.nombre_persona,p.id_unidad,r.nombre_rol,p.email FROM personas p JOIN roles r ON p.id_rol=r.id_rol WHERE id_persona=? AND password=?";
 
-    private String UPDATE_P = "UPDATE personas SET nombre_persona=?,password=? WHERE id_persona=?  ";
+    private String UPDATE_P = "UPDATE personas SET nombre_persona=?,password=?,email=? WHERE id_persona=?  ";
 
     private String EXISTENCIA_CUENTA = "SELECT * FROM personas WHERE id_persona=?";
 
@@ -106,12 +106,13 @@ public class UsuarioDAO {
                     usuarioreturn.setNombreUsuario(rs.getString(2) + " ");
                     usuarioreturn.setUnidadAcademica(rs.getInt(3));
                     usuarioreturn.setNombreRol(rs.getString(4));
+                    usuarioreturn.setEmail(rs.getString(5));
                     //usuarioreturn.setSession(true);
                     System.out.println("id usuario " + rs.getString(1));
                     System.out.println("login usuario-> " + rs.getInt(1));
                     System.out.println("unidad academica " + rs.getInt(3));
-
                     System.out.println("rol es --> " + rs.getString(4));
+                    System.out.println("email " + rs.getString(5));
 //                    System.out.println(" get unidad  " + usuarioreturn.getUnidadAcademica());
                     arrusuario.add(usuarioreturn);
                     // respuesta = true;
@@ -141,7 +142,7 @@ public class UsuarioDAO {
         return arrusuario;
     }
 
-    public boolean registrarUsuario(String idPersona, String clave, String nombre, int unidadAcademica, int rol) {
+    public boolean registrarUsuario(String idPersona, String clave, String nombre, int unidadAcademica, int rol, String email) {
 
         System.out.println("entra registrar");
         PreparedStatement ps = null;
@@ -158,10 +159,11 @@ public class UsuarioDAO {
                 ps.setString(3, nombre);
                 if (unidadAcademica != 0) {
                     ps.setInt(4, unidadAcademica);
-                }else{
-                    ps.setNull(4,Types.INTEGER);
+                } else {
+                    ps.setNull(4, Types.INTEGER);
                 }
                 ps.setInt(5, rol);
+                ps.setString(6, email);
                 ps.executeUpdate();
                 respuesta = true;
                 message = "Cuenta creada";
@@ -192,7 +194,7 @@ public class UsuarioDAO {
         return respuesta;
     }
 
-    public void modificarUsuario(String idPersona, String clave, String nombre) {
+    public void modificarUsuario(String idPersona, String clave, String nombre, String email) {
         System.out.println("entra update");
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -208,7 +210,8 @@ public class UsuarioDAO {
                 } else {
                     ps.setNull(2, Types.VARCHAR);
                 }
-                ps.setInt(3, Integer.parseInt(idPersona));
+                ps.setString(3, email);
+                ps.setInt(4, Integer.parseInt(idPersona));
 
                 ps.executeUpdate();
                 message = "Cambios realizados";

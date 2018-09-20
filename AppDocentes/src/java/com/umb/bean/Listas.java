@@ -22,9 +22,18 @@ import javax.faces.bean.ViewScoped;
 @ViewScoped
 public class Listas implements Serializable {
 
-    //listas:facultades,roles, docentes, laboratorios, materias, unidad academica(programas), asignaturas
-    private List<Lista> listaF, listaR, listaD, listaL, listaM, ListaUA, ListaUA2;
+    //listas:facultades,roles, docentes, laboratorios, materias, unidad academica(programas), asignaturas, grupos laboratorio
+    private List<Lista> listaF, listaR, listaD, listaL, listaM, ListaUA, ListaUA2,listaG;
 
+    public List<Lista> getListaG() {
+        return listaG;
+    }
+
+    public void setListaG(List<Lista> listaG) {
+        this.listaG = listaG;
+    }
+
+  
     public List<Lista> getListaUA2() {
         return ListaUA2;
     }

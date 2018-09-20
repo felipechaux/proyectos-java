@@ -25,6 +25,12 @@
                 <p:password id="clave"  required="true" requiredMessage="Clave requerida" value="#{usuario.clave}" feedback="true" />
                 <p:message for="clave" />
 
+                <p:outputLabel for="email" value="Email:" />
+                <p:inputText id="email"  required="true" requiredMessage="Email requerido" value="#{usuario.email}">
+                    <f:validator validatorId="custom.emailValidator" />
+                </p:inputText>
+                <p:message for="email" />
+
                 <p:outputLabel for="programa" value="Tipo de Programa: " /> 
                 <p:selectOneMenu required="true" id="programa" requiredMessage="Tipo de programa requerido " style="width:300px;"
                                  autoWidth="false" value="#{usuario.programa}">
@@ -66,11 +72,15 @@
                                      style="width: 150px;"
                                      action="#{usuario.crearCuenta()}"
                                      update="grid"
-
+                                     validateClient="true"
                                      />
                 </f:facet>
             </h:panelGrid>
+
+
         </h:form>
+
+      
     </h:body>
 </html>
 

@@ -75,6 +75,12 @@
                 <p:password id="clave" required="true" requiredMessage="Clave requerida" value="#{fingerPrint.clave}" feedback="true"  />
                 <p:message for="clave" />
 
+                 <p:outputLabel for="email" value="Email:" />
+                <p:inputText id="email"  required="true" requiredMessage="Email requerido" value="#{fingerPrint.email}">
+                    <f:validator validatorId="custom.emailValidator" />
+                </p:inputText>
+                <p:message for="email" />
+
                 <p:outputLabel for="programa" value="Tipo de Programa: " /> 
                 <p:selectOneMenu required="true" id="programa" requiredMessage="Tipo de programa requerido " style="width:300px;"
                                  autoWidth="false" value="#{fingerPrint.programa}">
@@ -118,6 +124,7 @@
                                      action="#{fingerPrint.crearCuenta()}"
                                      value="Crear"
                                      update="grid"
+                                     validateClient="true"
                                      />
                 </f:facet>
 

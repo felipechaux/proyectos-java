@@ -15,6 +15,7 @@
                               styleClass="pLayoutContenidoPrincipal" >
                     <h:form id="form-a">
                         <p:growl id="msg" autoUpdate="true" />  
+                        <h2><strong>Creacion de asignatura :</strong></h2>
                         <br></br>
                         <br></br>
                         <br></br> 
@@ -39,7 +40,7 @@
                         <br></br> 
                         <p:panel >
 
-                            <p:dataTable id="asignaturas" paginator="true" rows="5" value="#{asignatura.asignaturas}" var="a" style="width:570px;font-size: x-small;" selectionMode="single" selection="#{asignatura.selectedAsignatura}" rowKey="#{a.idAsignatura}" >
+                            <p:dataTable id="asignaturas" paginator="true" rows="5" value="#{asignatura.asignaturas}" var="a" style="margin-bottom:0;" selectionMode="single" selection="#{asignatura.selectedAsignatura}" rowKey="#{a.idAsignatura}" >
 
                                 <p:column headerText="Nombre"  sortBy="#{a.nombreAsignatura}" >
                                     <h:outputText value="#{a.nombreAsignatura}"  />

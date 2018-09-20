@@ -11,7 +11,7 @@ package com.umb.entities;
  */
 public  class Lista {
 
-    private int id;
+    private int id,cantidad;
     private String valor;
 
     public int getId() {
@@ -29,5 +29,14 @@ public  class Lista {
     public void setValor(String valor) {
         this.valor = valor;
     }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+    
 
 }

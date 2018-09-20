@@ -22,8 +22,6 @@ and open the template in the editor.
 
             <ui:define name="content">
 
-                <f:event type="preRenderView" listener="#{reserva.cargarMaterias(usuario.unidadAcademica)}"></f:event>
-
                 <p:layoutUnit position="center" resizable="false" id="contenidoPrincipal"
                               styleClass="pLayoutContenidoPrincipal" >
                     <!--                    <p:tabView id="tabv">
@@ -31,7 +29,11 @@ and open the template in the editor.
                     <h:form id="form1">
 
                         <p:growl id="grid-r" autoUpdate="true"  />
-                        <h:panelGrid  id="panel" columns="2" cellpadding="10">
+                        <h2><strong>Reservar aula de laboratorio :</strong></h2>
+                        <br></br>
+                        <br></br>
+                        <br></br> 
+                        <h:panelGrid  id="panel" columns="2" cellpadding="15">
 
                             <p:outputLabel id="label-docente" value="Docente: *" />
                             <p:selectOneMenu id="lista-docente"  required="true" requiredMessage="Docente requerido" style="width:300px;"
@@ -41,7 +43,7 @@ and open the template in the editor.
                             </p:selectOneMenu>
 
                             <p:outputLabel  value="Materia: *" />
-                            <p:selectOneMenu  required="true" requiredMessage="Materia requerido" style="width:300px;"
+                            <p:selectOneMenu  required="true" requiredMessage="Materia requerida" style="width:300px;"
                                               autoWidth="false" value="#{reserva.idMateria}">
                                 <f:selectItems value="#{reserva.listaM}" var="m" itemValue="#{m.id}" itemLabel="#{m.valor}" ></f:selectItems>
 
@@ -50,21 +52,65 @@ and open the template in the editor.
                             <p:outputLabel  value="Laboratorio: *" />
                             <p:selectOneMenu id="labs"  required="true" requiredMessage="Laboratorio requerido" style="width:300px;"
                                              autoWidth="false" value="#{reserva.idLaboratorio}">
-                                <p:ajax listener="#{reserva.cargarServicios(reserva.idLaboratorio)}" update="detalleServicios"  />                                <f:selectItem itemLabel="Seleccione un laboratorio" itemValue="" ></f:selectItem>
-                                <f:selectItems value="#{reserva.listaL}" var="l" itemValue="#{l.id}"  itemLabel="#{l.valor}"  />
+                                <p:ajax listener="#{reserva.cargarServicios(reserva.idLaboratorio)}" update="detalleServicios"  /> 
+                                <p:ajax listener="#{reserva.cargarCantidad(reserva.idLaboratorio)}" update="cantidad_equipos" /> 
+                                <p:ajax listener="#{reserva.cargarGruposLaboratorio()}" update="lista-grupos"  /> 
+
+                                <f:selectItem itemLabel="Seleccione un laboratorio" itemValue="" ></f:selectItem>
+                                <f:selectItems value="#{reserva.listaL}" var="l" itemValue="#{l.id}"  itemLabel="#{l.valor}"   />
                             </p:selectOneMenu>
-                            <!--                                    <p:selectBooleanCheckbox value="true">
-                                                                    <p:ajax update="msg"  />
-                                                                </p:selectBooleanCheckbox>-->
+
+                  
+                            <p:panel style="width: 550px">
+                                <p:outputLabel for="lista-grupos" value="Grupo : (seleccione un laboratorio para listar grupos)" />
+                                <p:selectOneMenu id="lista-grupos" required="false" style="width:300px;"
+                                                 autoWidth="false" value="#{reserva.idGrupoLaboratorio}" >
+                                    <f:selectItem itemLabel="NINGUNO" itemValue="" />
+                                    <f:selectItems value="#{reserva.listaG}" var="l" itemValue="#{l.id}"  itemLabel="#{l.valor}"   />
+                                </p:selectOneMenu>
+                                <p:message for="lista-grupos" />
+
+                                <p:commandButton rendered="#{usuario.permiso==true}" style="float:right;top: -27px;position: relative" value="Nuevo grupo" onclick="PF('grupoDialog').show();
+                                        return false;"  />
+
+                            </p:panel>
+                            <br></br>
+                            
+                            <p:outputLabel for="tipo-reserva" value="Tipo de reserva :" />
+                            <p:selectOneMenu id="tipo-reserva" required="true" requiredMessage="Tipo de reserva requerido" style="width:300px;"
+                                             autoWidth="false" value="#{reserva.tipoReserva}" >
+                                <f:selectItem itemLabel="Seleccione un tipo" itemValue="" />
+                                <f:selectItem itemLabel="REPOSICION" itemValue="REPOSICION" />
+                                <f:selectItem itemLabel="TUTORIA" itemValue="TUTORIA" />
+                                <f:selectItem itemLabel="PRACTICA" itemValue="PRACTICA" />
+                                <f:selectItem itemLabel="REUNION" itemValue="REUNION" />
+                                <f:selectItem itemLabel="CLASE TEORICA" itemValue="CLASE TEORICA" />
+                            </p:selectOneMenu>
+                            <p:message for="tipo-reserva" />
+                            <br></br>
+
+                            <p:outputLabel for="c-estudiantes" value="Cantidad estudiantes :"/>
+                            <p:spinner value="#{reserva.cantidadEstudiantes}" id="c-estudiantes" min="1" max="30" rendered="true"  requiredMessage="Cantidad de estudiantes requerido" />
+                            <p:message for="c-estudiantes" />
+
+                            <br></br>
+
+                            <p:outputLabel value="Observacion :"/>
+                            <p:inputTextarea value="#{reserva.observacion}" />
+                            <br></br>
+                            <br></br>
+                            <p:spacer/>
+                            <p:spacer/>
                             <p:commandButton  value="Calendario disponible" update="eventDetails" action="#{scheduleView.cargarDisponibilidadFechas(reserva.idLaboratorio)}"></p:commandButton>
 
                         </h:panelGrid>
                         <p:separator/>
 
                         <p:panel>
-                            <p:outputLabel  value="Detalle laboratorio :" />
+                            <p:outputLabel  value="Detalle laboratorio : (seleccione un laboratorio y un tipo de servicio para listar los servicios tecnologicos)" />
                             <br></br>
                             <br></br>
+
                             <p:outputLabel  value="Tipo de servicio :" />
                             <br></br>
                             <p:selectOneMenu id="tipo-servicio" value="#{reserva.tipoServicio}">
@@ -73,9 +119,12 @@ and open the template in the editor.
                                 <f:selectItem itemLabel="SOFTWARE" itemValue="SOFTWARE" />
                                 <f:selectItem itemLabel="HARDWARE" itemValue="HARDWARE" />
                             </p:selectOneMenu>
+
                             <br></br>
                             <br></br>
-                            <p:dataTable paginator="true" rows="5" id="detalleServicios" value="#{reserva.servicios}" var="r" style="width:570px;font-size: x-small;" >
+                            <h:outputLabel id="cantidad_equipos" value="Cantidad de equipos : #{reserva.cantidadEquipos} " />
+                            <p:dataTable paginator="true" rows="20" id="detalleServicios" value="#{reserva.servicios}" var="r" style="width:570px;font-size: x-small;" >
+
                                 <p:column headerText="Servicio" sortBy="#{r.nombre}" >
                                     <h:outputText id="serv" value="#{r.nombre}" />
                                 </p:column>
@@ -99,7 +148,7 @@ and open the template in the editor.
 
 
 
-                <p:dialog styleClass="title" widgetVar="disponibilidadDialog" header="CALENDARIO DISPONIBLE" showEffect="clip" hideEffect="clip" height="500" width="1200" responsive="true" draggable="false">
+                <p:dialog styleClass="title" widgetVar="disponibilidadDialog" header="CALENDARIO DISPONIBLE" showEffect="clip" hideEffect="clip" height="500" width="1200" responsive="true" draggable="true">
                     <h:panelGrid id="eventDetails" columns="2" cellspacing="35"  >
 
                         <p:schedule style="width: 680px;height: 500px;" draggable="false" styleClass="custom" id="schedule" value="#{scheduleView.eventModel}" widgetVar="myschedule" timeZone="GMT-5"   >
@@ -107,6 +156,7 @@ and open the template in the editor.
                         </p:schedule>
 
                         <p:dataTable id="bloques" value="#{scheduleView.bloques}" var="b" style="width: 400px;margin-left: 10%;">
+
                             <p:column headerText="Bloque disponible">
                                 <h:outputText value="#{b.bloque}"  />
                             </p:column>
@@ -118,12 +168,29 @@ and open the template in the editor.
 
                             </p:column>
 
-
                         </p:dataTable>
 
 
                     </h:panelGrid>
-                </p:dialog>  
+                </p:dialog> 
+
+                <p:dialog styleClass="title" widgetVar="grupoDialog" header="CREAR GRUPO"  height="250" width="350" responsive="true" draggable="false" resizable="false">
+                    <h:form>
+                        <h:panelGrid  columns="1" cellpadding="5">
+                            <p:outputLabel  value="Laboratorio: *" />
+                            <p:selectOneMenu id="labs2"  required="true" requiredMessage="Laboratorio requerido" style="width:300px;"
+                                             autoWidth="false" value="#{reserva.idLaboratorio}">
+                                <f:selectItem itemLabel="Seleccione un laboratorio" itemValue="" ></f:selectItem>
+                                <f:selectItems value="#{reserva.listaL}" var="l" itemValue="#{l.id}"  itemLabel="#{l.valor}"   />
+                            </p:selectOneMenu>
+                            <p:outputLabel  value="Nombre Grupo :" />
+                            <p:inputText required="true" requiredMessage="Nombre de grupo requerido" value="#{reserva.nombreGrupo}"/>
+
+                            <br></br>
+                            <p:commandButton  value="Guardar" action="#{reserva.crearGrupo()}" update="form1:lista-grupos" />
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog> 
 
                 <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
                     <p:graphicImage  url="/resources/images/ajax-loader.gif" />
@@ -142,10 +209,17 @@ and open the template in the editor.
                                 $('#form1\\:lista-docente').css("display", "none");
                                 break;
                             }
+                            case 'AUXILIAR DE LABORATORIO':
+                            {
+
+                                alert("No tiene suficientes permisos para acceder a esta pagina");
+                                break;
+                            }
 
                         }
                     });
                 </script>
+
 
             </ui:define>
         </ui:composition>

@@ -69,6 +69,7 @@
                                             <li><a id="administracion-bloques" href="../pages/calendarioForm.xhtml?faces-redirect=true">Bloques laboratorio</a></li>
                                             <li><a id="administracion-servicios" href="../pages/formServicio.xhtml?faces-redirect=true">Servicios tecnologicos</a></li>
                                             <li><a id="administracion-asignaturas" href="../pages/formAsignatura.xhtml?faces-redirect=true">Asignaturas</a></li>
+                                            <li><a id="administracion-asignaturas" href="../pages/formReserva.xhtml?faces-redirect=true">Reservas</a></li>
                                         </ul>
                                     </li>
                                     <li><a><i class="fas fa-fingerprint" style="font-size: 20px"></i> Control BIOMINI <span class="fa fa-chevron-down"></span></a>
@@ -168,11 +169,13 @@
             </div>
         </div>
 
-        <p:dialog modal="true" styleClass="title" widgetVar="dlg-perfil" header="Modificar cuenta" showEffect="fade" hideEffect="fade" height="170" width="400" resizable="false" draggable="false">
+        <p:dialog modal="true" styleClass="title" widgetVar="dlg-perfil" header="Modificar cuenta" showEffect="fade" hideEffect="fade" height="250" width="420" resizable="false" draggable="false">
             <h:form>
                 <p:panelGrid  columns="2" >
                     <p:outputLabel value="Nombre :"/>
                     <p:inputText value="#{usuario.nombreUsuario}" />
+                    <p:outputLabel value="Email :"/>
+                    <p:inputText value="#{usuario.email}" />
                     <p:outputLabel value="Nueva contraseña :"/>
                     <p:password value="#{usuario.clave}" />
                     <br></br>

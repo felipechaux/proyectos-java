@@ -11,7 +11,15 @@ package com.umb.entities;
  */
 public class NombreDisponibilidad {
     
-    private String fecha,bloque,nombreLaboratorio,nombreAsignatura,nombrePersonaAsignada;
+    private String fecha,bloque,nombreLaboratorio,nombreAsignatura,nombrePersonaAsignada,emailPersonaAsignada;
+
+    public String getEmailPersonaAsignada() {
+        return emailPersonaAsignada;
+    }
+
+    public void setEmailPersonaAsignada(String emailPersonaAsignada) {
+        this.emailPersonaAsignada = emailPersonaAsignada;
+    }
 
     public String getNombrePersonaAsignada() {
         return nombrePersonaAsignada;

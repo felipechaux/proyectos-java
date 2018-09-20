@@ -65,10 +65,10 @@ public class Usuario extends Persona implements Serializable {
     public void crearCuenta() {
         RequestContext rc = RequestContext.getCurrentInstance();
 
-        if (this.getNombreUsuario() != null  && this.getId() != null && this.getClave() != null && this.getRol() != 0) {
+        if (this.getNombreUsuario() != null  && this.getId() != null && this.getClave() != null && this.getRol() != 0 && this.getEmail()!=null) {
             System.out.println("INSERT");
             try { //this.getTipoCargo()
-                usuario.registrarUsuario(this.getId(), this.getClave(), this.getNombreUsuario(), this.getUnidadAcademica(), this.getRol());
+                usuario.registrarUsuario(this.getId(), this.getClave(), this.getNombreUsuario(), this.getUnidadAcademica(), this.getRol(),this.getEmail());
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, usuario.getMessage(), null);
                 FacesContext.getCurrentInstance().addMessage(null, message);
                 rc.execute("PF('dlg-usuario').hide()");
@@ -85,7 +85,7 @@ public class Usuario extends Persona implements Serializable {
         System.out.println("modificar id " + this.getId());
         System.out.println("pass " + this.getClave());
         System.out.println("nombre " + this.getNombreUsuario());
-        usuario.modificarUsuario(this.getId(), this.getClave(), this.getNombreUsuario());
+        usuario.modificarUsuario(this.getId(), this.getClave(), this.getNombreUsuario(),this.getEmail());
         message = new FacesMessage(FacesMessage.SEVERITY_INFO, usuario.getMessage(), null);
         FacesContext.getCurrentInstance().addMessage(null, message);
 
@@ -109,7 +109,8 @@ public class Usuario extends Persona implements Serializable {
                     this.setNombreUsuario(usr.getNombreUsuario());
                     this.setUnidadAcademica(usr.getUnidadAcademica());
                     this.setNombreRol(usr.getNombreRol());
-
+                    this.setEmail(usr.getEmail());
+                    
                     if (this.getNombreRol().equals("AUXILIAR DE LABORATORIO")) {
                         return "/pages/fingerprint?faces-redirect=true";
                     } else {
@@ -134,11 +135,6 @@ public class Usuario extends Persona implements Serializable {
         return "index";
     }
     
-    
-    public String autenticarHuella() throws InterruptedException {
-
-        return null;
-    }
 
     public String salir() {
         System.out.println("Log off");
