@@ -12,7 +12,7 @@
         <ui:composition template="../templates/template.xhtml">  
             <ui:define name="content" >
 
-                <p:layoutUnit rendered="#{usuario.permiso==true}" position="center" resizable="false" id="contenidoPrincipal"
+                <p:layoutUnit rendered="#{usuario.permiso3==true or usuario.permiso==true}" position="center" resizable="false" id="contenidoPrincipal"
                               styleClass="pLayoutContenidoPrincipal" >
                     <h:form id="form-r">
                         <f:event type="preRenderView" listener="#{reserva.cargarReservas()}"/>
@@ -30,6 +30,9 @@
                                 <p:column headerText="Usuario" sortBy="#{r.nombreUsuario}" filterBy="#{r.nombreUsuario}">
                                     <h:outputText value="#{r.nombreUsuario}"  />
                                 </p:column>
+                                <p:column headerText="Fecha" sortBy="#{r.fecha}" filterBy="#{r.fecha}">
+                                    <h:outputText value="#{r.fecha}"  />
+                                </p:column>
                                 <p:column headerText="Bloque" sortBy="#{r.bloque}">
                                     <h:outputText value="#{r.bloque}"  />
                                 </p:column>
@@ -38,6 +41,9 @@
                                 </p:column>
                                 <p:column headerText="Materia" sortBy="#{r.nombreMateria}" filterBy="#{r.nombreMateria}">
                                     <h:outputText value="#{r.nombreMateria}" />
+                                </p:column>
+                                <p:column headerText="Grupo materia" sortBy="#{r.nombreGrupoMateria}" filterBy="#{r.nombreGrupoMateria}">
+                                    <h:outputText value="#{r.nombreGrupoMateria}" />
                                 </p:column>
                                 <p:column headerText="Tipo de reserva" sortBy="#{r.tipoReserva}">
                                     <h:outputText value="#{r.tipoReserva}"  />
@@ -60,7 +66,7 @@
                 </p:layoutUnit>
 
 
-                <p:dialog header="Modificar reserva" widgetVar="multiDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="510" height="240">
+                <p:dialog header="Modificar reserva" widgetVar="multiDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="700" height="300">
 
                     <f:event type="preRenderView" listener="#{reserva.cargarMaterias(usuario.unidadAcademica)}"></f:event>
 
@@ -72,15 +78,15 @@
 
                                 <p:outputLabel class="dialog-label" value="Docente : " />
                                 <p:selectOneMenu requiredMessage="Docente requerido" style="width:300px;"
-                                                  autoWidth="false" value="#{reserva.idPersona}">
+                                                 autoWidth="false" value="#{reserva.idPersona}">
 
-                                    <f:selectItem itemLabel="" itemValue="0" />
+                                    <f:selectItem itemLabel="NO MODIFICAR" itemValue="0" />
                                     <f:selectItems value="#{reserva.listaD}" var="d" itemValue="#{d.id}"  itemLabel="#{d.valor}"  />
                                 </p:selectOneMenu>
                                 <p:outputLabel class="dialog-label" value="Tipo de reserva :" />
                                 <p:selectOneMenu requiredMessage="Tipo de reserva requerido" style="width:300px;"
                                                  autoWidth="false" value="#{reserva.tipoReserva}" >
-                                    <f:selectItem itemLabel="" itemValue="" />
+                                    <f:selectItem itemLabel="NO MODIFICAR" itemValue="" />
                                     <f:selectItem itemLabel="REPOSICION" itemValue="REPOSICION" />
                                     <f:selectItem itemLabel="TUTORIA" itemValue="TUTORIA" />
                                     <f:selectItem itemLabel="PRACTICA" itemValue="PRACTICA" />
@@ -90,13 +96,25 @@
                                 <p:outputLabel  class="dialog-label" value="Materia: *" />
                                 <p:selectOneMenu  requiredMessage="Materia requerida" style="width:300px;"
                                                   autoWidth="false" value="#{reserva.idMateria}">
-                                    <f:selectItem itemLabel="" itemValue="" />
+                                    <p:ajax listener="#{reserva.cargarGruposMateria()}" update="lista-grupos2"  /> 
+                                    <f:selectItem itemLabel="NO MODIFICAR" itemValue="0" />
                                     <f:selectItems value="#{reserva.listaM}" var="m" itemValue="#{m.id}" itemLabel="#{m.valor}" ></f:selectItems>
 
                                 </p:selectOneMenu>
+
+                                <p:outputLabel class="dialog-label" value="Grupo : (seleccione una materia para listar grupos)" />
+                                <p:selectOneMenu id="lista-grupos2" required="false" style="width:300px;"
+                                                 autoWidth="false" value="#{reserva.idGrupoMateria}" >
+                                    <f:selectItem itemLabel="NO MODIFICAR" itemValue="" />
+                                    <f:selectItems value="#{reserva.listaG}" var="l" itemValue="#{l.id}"  itemLabel="#{l.valor}"   />
+                                </p:selectOneMenu>
+
                                 <p:outputLabel  class="dialog-label" value="Cantidad estudiantes: *" />
-                                <p:inputText value="#{reserva.cantidadEstudiantes}" />
-                                
+                                <p:inputText value="#{reserva.cantidadEstudiantes}">
+                                    <p:selectBooleanCheckbox value="#{reserva.modificarCantidad}"  ></p:selectBooleanCheckbox>
+                                    <p:outputLabel  value="modificar  " />
+
+                                </p:inputText>
 
                                 <p:commandButton value="Modificar" action="#{reserva.modificarReserva()}" update=":form-r:reservas-all" oncomplete="PF('multiDialog').hide()"/>
                             </p:panelGrid>

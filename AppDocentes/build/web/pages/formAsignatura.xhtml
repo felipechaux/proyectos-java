@@ -11,7 +11,7 @@
     <h:body>
         <ui:composition template="../templates/template.xhtml"> 
             <ui:define name="content" >
-                <p:layoutUnit rendered="#{usuario.permiso==true}" position="center" resizable="false" id="contenidoPrincipal"
+                <p:layoutUnit rendered="#{usuario.permiso3==true or usuario.permiso==true}" position="center" resizable="false" id="contenidoPrincipal"
                               styleClass="pLayoutContenidoPrincipal" >
                     <h:form id="form-a">
                         <p:growl id="msg" autoUpdate="true" />  
@@ -40,7 +40,7 @@
                         <br></br> 
                         <p:panel >
 
-                            <p:dataTable id="asignaturas" paginator="true" rows="5" value="#{asignatura.asignaturas}" var="a" style="margin-bottom:0;" selectionMode="single" selection="#{asignatura.selectedAsignatura}" rowKey="#{a.idAsignatura}" >
+                            <p:dataTable id="asignaturas" paginator="true" rows="20" value="#{asignatura.asignaturas}" var="a" style="margin-bottom:0;" selectionMode="single" selection="#{asignatura.selectedAsignatura}" rowKey="#{a.idAsignatura}" >
 
                                 <p:column headerText="Nombre"  sortBy="#{a.nombreAsignatura}" >
                                     <h:outputText value="#{a.nombreAsignatura}"  />

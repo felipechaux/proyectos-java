@@ -32,7 +32,7 @@ public class Usuario extends Persona implements Serializable {
 
     private String url;
 
-    private boolean permiso, permiso2;
+    private boolean permiso, permiso2,permiso3;
 
     public Usuario() {
         usuario = new UsuarioDAO();
@@ -44,6 +44,14 @@ public class Usuario extends Persona implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public boolean isPermiso3() {
+        return permiso3;
+    }
+
+    public void setPermiso3(boolean permiso3) {
+        this.permiso3 = permiso3;
     }
 
     public boolean isPermiso() {
@@ -110,6 +118,7 @@ public class Usuario extends Persona implements Serializable {
                     this.setUnidadAcademica(usr.getUnidadAcademica());
                     this.setNombreRol(usr.getNombreRol());
                     this.setEmail(usr.getEmail());
+                    this.setNombreUnidadAcademica(usr.getNombreUnidadAcademica());
                     
                     if (this.getNombreRol().equals("AUXILIAR DE LABORATORIO")) {
                         return "/pages/fingerprint?faces-redirect=true";
@@ -153,6 +162,8 @@ public class Usuario extends Persona implements Serializable {
             //permisos
             switch (this.getNombreRol()) {
                 case "DIRECTOR":
+                    permiso3=true;
+                    break;
                 case "COORDINADOR":
                     System.out.println("permisos all");
                     permiso = true;
@@ -165,6 +176,9 @@ public class Usuario extends Persona implements Serializable {
                     break;
                 case "DOCENTE":
                     permiso = false;
+                    permiso2=false;
+                    permiso3=false;
+                    System.out.println("permisos1 "+permiso+" permiso2 "+permiso2+" permiso3 "+permiso3);
                     url = "../pages/reserva.xhtml?faces-redirect=true";
                     break;
             }

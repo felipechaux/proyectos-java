@@ -25,6 +25,8 @@ public class ListasDAO {
 
     private String SELECT_UA2 = "SELECT id_unidad,nombre_unidad FROM unidad_academica";
 
+    private String SELECT_UA3 = "SELECT id_unidad,nombre_unidad,reserva FROM unidad_academica";
+
     private String SELECT_F = "SELECT * FROM facultades";
 
     private String SELECT_R_INDEX = "SELECT id_rol,nombre_rol FROM roles WHERE nombre_rol NOT IN ('COORDINADOR','DIRECTOR')";
@@ -53,7 +55,7 @@ public class ListasDAO {
             + " where d.id_disponibilidad=?";
 
     //grupos laboratorio
-    private String SELECT_G = " SELECT id_grupo_laboratorio,nombre_grupo FROM grupo_laboratorio WHERE id_laboratorio=? ";
+    private String SELECT_G = " SELECT id_grupo_materia,nombre_grupo FROM grupo_materia WHERE id_materia=? ";
 
     ArrayList<Lista> listaArr;
 
@@ -172,8 +174,24 @@ public class ListasDAO {
                         }
                         break;
                     }
-                    // grupos laboratorio
-                    case "LGL": {
+                    case "LUA3": {
+                        ps = con.prepareStatement(SELECT_UA3);
+                        rs = ps.executeQuery();
+                        while (rs.next()) {
+                            listareturn = new Lista();
+                            listareturn.setId(rs.getInt(1));
+                            listareturn.setValor(rs.getString(2));
+                            if (rs.getInt(3) == 1) {
+                                listareturn.setReserva(true);
+                            } else {
+                                listareturn.setReserva(false);
+                            }
+                            listaArr.add(listareturn);
+                        }
+                        break;
+                    }
+                    // grupos materia
+                    case "LGM": {
                         ps = con.prepareStatement(SELECT_G);
                         ps.setInt(1, value);
                         rs = ps.executeQuery();

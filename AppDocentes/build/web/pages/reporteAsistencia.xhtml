@@ -10,7 +10,7 @@
     <h:body>
         <ui:composition template="../templates/template.xhtml">  
             <ui:define name="content" >
-                <p:layoutUnit rendered="#{usuario.permiso==true or usuario.permiso2==true}" position="center" resizable="false" id="contenidoPrincipal"
+                <p:layoutUnit rendered="#{usuario.permiso3==true or usuario.permiso==true or usuario.permiso2==true}" position="center" resizable="false" id="contenidoPrincipal"
                               styleClass="pLayoutContenidoPrincipal" >
                     <br></br>
                     <br></br>
@@ -50,6 +50,9 @@
                             <p:column headerText="Tipo de reserva " sortBy="#{a.tipoReserva}" >
                                 <h:outputText value="#{a.tipoReserva}"  />
                             </p:column>
+                            <p:column headerText="Grupo materia " sortBy="#{a.grupoMateria}" >
+                                <h:outputText value="#{a.grupoMateria}"  />
+                            </p:column>
                             <p:column headerText="Fecha"  >
                                 <h:outputText value="#{a.fecha}"  />
                             </p:column>
@@ -72,7 +75,7 @@
                     //permisos vistas
                     $(document).on("ready", function () {
                         switch ('#{usuario.nombreRol}') {
-                            
+
                             case 'DOCENTE':
                             {
 

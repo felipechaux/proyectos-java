@@ -306,6 +306,8 @@ public class FingerPrint extends Persona implements Serializable {
                                 usuario.setNombreUsuario(h.getNombrePersona());
                                 usuario.setUnidadAcademica(h.getIdUnidad());
                                 usuario.setNombreRol(h.getNombreRol());
+                                usuario.setEmail(h.getEmail());
+                                usuario.setNombreUnidadAcademica(h.getNombreUnidadAcademica());
 
                                 if (usuario.getNombreRol().equals("AUXILIAR DE LABORATORIO")) {
                                     return "/pages/fingerprint?faces-redirect=true";

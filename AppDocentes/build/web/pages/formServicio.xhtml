@@ -11,7 +11,7 @@
     <h:body>
         <ui:composition template="../templates/template.xhtml"> 
             <ui:define name="content" >
-                <p:layoutUnit rendered="#{usuario.permiso==true}" position="center" resizable="false" id="contenidoPrincipal"
+                <p:layoutUnit rendered="#{usuario.permiso3==true or usuario.permiso==true}" position="center" resizable="false" id="contenidoPrincipal"
                               styleClass="pLayoutContenidoPrincipal" >
                     <h:form id="form-servicio">
                         <p:growl id="msg" autoUpdate="true" />  
@@ -40,6 +40,15 @@
                                 <f:selectItems value="#{reserva.listaL}" var="l" itemValue="#{l.id}"  itemLabel="#{l.valor}"  />
                             </p:selectOneMenu>
                             <p:message for="laboratorio" />
+                            
+                            <p:outputLabel for="tipo-servicio" value="Tipo de servicio : " />
+                            <p:selectOneMenu id="tipo-servicio" required="true" style="width:300px;"
+                                             autoWidth="false" value="#{servicio.tipoServicio}">
+                                <f:selectItem itemLabel="Seleccione un tipo de servicio" itemValue="" />
+                                <f:selectItem itemLabel="SOFTWARE" itemValue="SOFTWARE" />
+                                <f:selectItem itemLabel="HARDWARE" itemValue="HARDWARE" />
+                            </p:selectOneMenu>
+                              <p:message for="tipo-servicio" />
 
                             <p:commandButton value="Guardar" action="#{servicio.crearServicio()}" update="servicios"/>
 
@@ -48,9 +57,9 @@
                         <br></br> 
                         <p:panel >
 
-                            <p:dataTable id="servicios" paginator="true" rows="5" value="#{servicio.servicios}" var="s" style="margin-bottom:0;" selectionMode="single" selection="#{servicio.selectedServicio}" rowKey="#{s.idServicio}" >
+                            <p:dataTable id="servicios" paginator="true" rows="20" value="#{servicio.servicios}" var="s" style="margin-bottom:0;" selectionMode="single" selection="#{servicio.selectedServicio}" rowKey="#{s.idServicio}" >
 
-                                <p:column headerText="Nombre"  sortBy="#{s.nombre}" >
+                                <p:column headerText="Nombre" filterBy="#{s.nombre}" sortBy="#{s.nombre}" >
                                     <h:outputText value="#{s.nombre}"  />
                                 </p:column> 
 

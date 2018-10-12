@@ -3,11 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Administrador/Documents/NetBeansProjects/AppDocentes/web/pages/formAsignatura.xhtml</file>
-            <file>file:/C:/Users/Administrador/Documents/NetBeansProjects/AppDocentes/web/pages/reserva.xhtml</file>
-            <file>file:/C:/Users/Administrador/Documents/NetBeansProjects/AppDocentes/src/java/com/umb/dao/ReservaDAO.java</file>
-            <file>file:/C:/Users/Administrador/Documents/NetBeansProjects/AppDocentes/web/pages/formReserva.xhtml</file>
-            <file>file:/C:/Users/Administrador/Documents/NetBeansProjects/AppDocentes/src/java/com/umb/bean/Reserva.java</file>
+            <file>file:/C:/Users/Administrador/Documents/NetBeansProjects/AppDocentes/src/java/com/umb/dao/Correo.java</file>
+            <file>file:/C:/Users/Administrador/Documents/NetBeansProjects/AppDocentes/web/index.xhtml</file>
         </group>
     </open-files>
 </project-private>

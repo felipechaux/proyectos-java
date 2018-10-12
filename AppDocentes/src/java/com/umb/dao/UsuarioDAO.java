@@ -25,7 +25,7 @@ public class UsuarioDAO {
 
     private String INSERT = "INSERT INTO personas(id_persona,password,nombre_persona,id_unidad,id_rol,email) VALUES(?,?,?,?,?,?)";
 
-    private String SELECT_P = "SELECT p.id_persona,p.nombre_persona,p.id_unidad,r.nombre_rol,p.email FROM personas p JOIN roles r ON p.id_rol=r.id_rol WHERE id_persona=? AND password=?";
+    private String SELECT_P = "SELECT p.id_persona,p.nombre_persona,p.id_unidad,r.nombre_rol,p.email,u.nombre_unidad FROM personas p JOIN roles r ON p.id_rol=r.id_rol JOIN unidad_academica u ON p.id_unidad=u.id_unidad WHERE id_persona=? AND password=?";
 
     private String UPDATE_P = "UPDATE personas SET nombre_persona=?,password=?,email=? WHERE id_persona=?  ";
 
@@ -107,6 +107,7 @@ public class UsuarioDAO {
                     usuarioreturn.setUnidadAcademica(rs.getInt(3));
                     usuarioreturn.setNombreRol(rs.getString(4));
                     usuarioreturn.setEmail(rs.getString(5));
+                    usuarioreturn.setNombreUnidadAcademica(rs.getString(6));
                     //usuarioreturn.setSession(true);
                     System.out.println("id usuario " + rs.getString(1));
                     System.out.println("login usuario-> " + rs.getInt(1));

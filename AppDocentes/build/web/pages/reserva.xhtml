@@ -21,6 +21,7 @@ and open the template in the editor.
         <ui:composition template="../templates/template.xhtml"> 
 
             <ui:define name="content">
+                <f:event type="preRenderView" listener="#{reserva.cargarMaterias(usuario.unidadAcademica)}"></f:event>
 
                 <p:layoutUnit position="center" resizable="false" id="contenidoPrincipal"
                               styleClass="pLayoutContenidoPrincipal" >
@@ -36,46 +37,46 @@ and open the template in the editor.
                         <h:panelGrid  id="panel" columns="2" cellpadding="15">
 
                             <p:outputLabel id="label-docente" value="Docente: *" />
-                            <p:selectOneMenu id="lista-docente"  required="true" requiredMessage="Docente requerido" style="width:300px;"
+                            <p:selectOneMenu id="lista-docente"  required="#{usuario.permiso or usuario.permiso3}"  requiredMessage="Docente requerido" style="width:300px;"
                                              autoWidth="false" value="#{reserva.idPersona}">
-
+                                <f:selectItem itemLabel="Seleccione un docente" itemValue="" ></f:selectItem>
                                 <f:selectItems value="#{reserva.listaD}" var="d" itemValue="#{d.id}"  itemLabel="#{d.valor}"  />
                             </p:selectOneMenu>
 
                             <p:outputLabel  value="Materia: *" />
                             <p:selectOneMenu  required="true" requiredMessage="Materia requerida" style="width:300px;"
                                               autoWidth="false" value="#{reserva.idMateria}">
+                                <p:ajax listener="#{reserva.cargarGruposMateria()}" update="lista-grupos"  /> 
+                                <f:selectItem itemLabel="Seleccione una materia" itemValue="" ></f:selectItem>
                                 <f:selectItems value="#{reserva.listaM}" var="m" itemValue="#{m.id}" itemLabel="#{m.valor}" ></f:selectItems>
 
                             </p:selectOneMenu>
+
+                            <p:panel style="width: 550px">
+                                <p:outputLabel for="lista-grupos" value="Grupo : (seleccione una materia para listar grupos)" />
+                                <p:selectOneMenu id="lista-grupos" required="false" style="width:300px;"
+                                                 autoWidth="false" value="#{reserva.idGrupoMateria}" >
+                                    <f:selectItem itemLabel="NINGUNO" itemValue="" />
+                                    <f:selectItems value="#{reserva.listaG}" var="l" itemValue="#{l.id}"  itemLabel="#{l.valor}"   />
+                                </p:selectOneMenu>
+                                <p:message for="lista-grupos" />
+
+                                <p:commandButton rendered="#{usuario.permiso3==true or usuario.permiso==true}" style="float:right;top: -27px;position: relative" value="Nuevo grupo" onclick="PF('grupoDialog').show();
+                                        return false;"  />
+
+                            </p:panel>
+                            <br></br>
 
                             <p:outputLabel  value="Laboratorio: *" />
                             <p:selectOneMenu id="labs"  required="true" requiredMessage="Laboratorio requerido" style="width:300px;"
                                              autoWidth="false" value="#{reserva.idLaboratorio}">
                                 <p:ajax listener="#{reserva.cargarServicios(reserva.idLaboratorio)}" update="detalleServicios"  /> 
                                 <p:ajax listener="#{reserva.cargarCantidad(reserva.idLaboratorio)}" update="cantidad_equipos" /> 
-                                <p:ajax listener="#{reserva.cargarGruposLaboratorio()}" update="lista-grupos"  /> 
 
                                 <f:selectItem itemLabel="Seleccione un laboratorio" itemValue="" ></f:selectItem>
                                 <f:selectItems value="#{reserva.listaL}" var="l" itemValue="#{l.id}"  itemLabel="#{l.valor}"   />
                             </p:selectOneMenu>
 
-                  
-                            <p:panel style="width: 550px">
-                                <p:outputLabel for="lista-grupos" value="Grupo : (seleccione un laboratorio para listar grupos)" />
-                                <p:selectOneMenu id="lista-grupos" required="false" style="width:300px;"
-                                                 autoWidth="false" value="#{reserva.idGrupoLaboratorio}" >
-                                    <f:selectItem itemLabel="NINGUNO" itemValue="" />
-                                    <f:selectItems value="#{reserva.listaG}" var="l" itemValue="#{l.id}"  itemLabel="#{l.valor}"   />
-                                </p:selectOneMenu>
-                                <p:message for="lista-grupos" />
-
-                                <p:commandButton rendered="#{usuario.permiso==true}" style="float:right;top: -27px;position: relative" value="Nuevo grupo" onclick="PF('grupoDialog').show();
-                                        return false;"  />
-
-                            </p:panel>
-                            <br></br>
-                            
                             <p:outputLabel for="tipo-reserva" value="Tipo de reserva :" />
                             <p:selectOneMenu id="tipo-reserva" required="true" requiredMessage="Tipo de reserva requerido" style="width:300px;"
                                              autoWidth="false" value="#{reserva.tipoReserva}" >
@@ -177,11 +178,13 @@ and open the template in the editor.
                 <p:dialog styleClass="title" widgetVar="grupoDialog" header="CREAR GRUPO"  height="250" width="350" responsive="true" draggable="false" resizable="false">
                     <h:form>
                         <h:panelGrid  columns="1" cellpadding="5">
-                            <p:outputLabel  value="Laboratorio: *" />
-                            <p:selectOneMenu id="labs2"  required="true" requiredMessage="Laboratorio requerido" style="width:300px;"
-                                             autoWidth="false" value="#{reserva.idLaboratorio}">
-                                <f:selectItem itemLabel="Seleccione un laboratorio" itemValue="" ></f:selectItem>
-                                <f:selectItems value="#{reserva.listaL}" var="l" itemValue="#{l.id}"  itemLabel="#{l.valor}"   />
+                            <p:outputLabel  value="Materia: *" />
+
+                            <p:selectOneMenu  required="true" requiredMessage="Materia requerida" style="width:300px;"
+                                              autoWidth="false" value="#{reserva.idMateria}">
+                                <f:selectItem itemLabel="Seleccione una materia" itemValue="" ></f:selectItem>
+                                <f:selectItems value="#{reserva.listaM}" var="m" itemValue="#{m.id}" itemLabel="#{m.valor}" ></f:selectItems>
+
                             </p:selectOneMenu>
                             <p:outputLabel  value="Nombre Grupo :" />
                             <p:inputText required="true" requiredMessage="Nombre de grupo requerido" value="#{reserva.nombreGrupo}"/>
@@ -204,9 +207,8 @@ and open the template in the editor.
 
                             case 'DOCENTE':
                             {
-
                                 $('#form1\\:label-docente').css("display", "none");
-                                $('#form1\\:lista-docente').css("display", "none");
+                                $('#form1\\:lista-docente').css("display", "none");                                
                                 break;
                             }
                             case 'AUXILIAR DE LABORATORIO':

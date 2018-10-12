@@ -27,13 +27,15 @@ import java.util.logging.Logger;
  */
 public class ReservaDAO {
 
-    private String INSERT = "INSERT INTO reservas(id_persona,id_disponibilidad,tipo_reserva,id_materia,observacion,cantidad_estudiantes,id_grupo_laboratorio) VALUES(?,?,?,?,?,?,?)";
+    private String INSERT = "INSERT INTO reservas(id_persona,id_disponibilidad,tipo_reserva,id_materia,observacion,cantidad_estudiantes,id_grupo_materia) VALUES(?,?,?,?,?,?,?)";
 
-    private String UPDATE_R="update reservas SET id_persona=?,tipo_reserva=?,id_materia=?,cantidad_estudiantes=? WHERE id_reserva=? ";
+    private String UPDATE_PRIORIDAD_RESERVA=" UPDATE unidad_academica SET reserva=? WHERE id_unidad=? ";
+    
+    private String UPDATE_R="UPDATE reservas SET id_persona=?,tipo_reserva=?,id_materia=?,cantidad_estudiantes=?,id_grupo_materia=? WHERE id_reserva=? ";
     
     private String INSERT_P = "INSERT INTO control_prestamo(id_reserva,hora_entrada,observacion,id_persona_encargada_e) VALUES(?,?,?,?)";
     //grupo laboratorio
-    private String INSERT_G = "INSERT INTO grupo_laboratorio(nombre_grupo,id_laboratorio) VALUES (?,?)";
+    private String INSERT_G = "INSERT INTO grupo_materia(nombre_grupo,id_materia) VALUES (?,?)";
 
     private String VALIDACION_INSERT_P = "SELECT * FROM control_prestamo WHERE id_reserva=? AND hora_entrada IS NOT NULL AND hora_salida IS NULL";
 
@@ -53,7 +55,7 @@ public class ReservaDAO {
     //reserva persona
     private String SELECT_RP = "SELECT p.nombre_persona,d.bloque_ini,d.bloque_fin,l.nombre_laboratorio,m.nombre_materia,r.tipo_reserva,r.observacion,r.cantidad_estudiantes FROM reservas r JOIN disponibilidad_laboratorio d ON r.id_disponibilidad=d.id_disponibilidad JOIN personas p ON r.id_persona=p.id_persona JOIN materias m ON r.id_materia=m.id_materia  JOIN laboratorios l ON d.id_laboratorio=l.id_laboratorio WHERE d.fecha=?";
 
-    private String SELECT_RESERVAS = "SELECT p.nombre_persona,d.bloque_ini,d.bloque_fin,l.nombre_laboratorio,m.nombre_materia,r.tipo_reserva,r.observacion,r.cantidad_estudiantes,r.id_reserva FROM reservas r JOIN disponibilidad_laboratorio d ON r.id_disponibilidad=d.id_disponibilidad JOIN personas p ON r.id_persona=p.id_persona JOIN materias m ON r.id_materia=m.id_materia  JOIN laboratorios l ON d.id_laboratorio=l.id_laboratorio";
+    private String SELECT_RESERVAS = "SELECT p.nombre_persona,d.bloque_ini,d.bloque_fin,l.nombre_laboratorio,m.nombre_materia,r.tipo_reserva,r.observacion,r.cantidad_estudiantes,r.id_reserva,d.fecha,g.nombre_grupo FROM reservas r JOIN disponibilidad_laboratorio d ON r.id_disponibilidad=d.id_disponibilidad JOIN personas p ON r.id_persona=p.id_persona JOIN materias m ON r.id_materia=m.id_materia  JOIN laboratorios l ON d.id_laboratorio=l.id_laboratorio LEFT JOIN grupo_materia g ON r.id_grupo_materia=g.id_grupo_materia";
 
     Date fechaActual;
 
@@ -96,7 +98,7 @@ public class ReservaDAO {
         this.message = message;
     }
 
-    public boolean registrarGrupoLaboratorio(String nombreGrupo, int idLaboratorio) {
+    public boolean registrarGrupoMateria(String nombreGrupo, int idMateria) {
         PreparedStatement ps = null;
         ResultSet rs = null;
         boolean respuesta = false;
@@ -107,7 +109,7 @@ public class ReservaDAO {
 
                 ps = con.prepareStatement(INSERT_G);
                 ps.setString(1, nombreGrupo);
-                ps.setInt(2, idLaboratorio);
+                ps.setInt(2, idMateria);
                 ps.executeUpdate();
                 message = "Grupo creado";
                 System.out.println("insert exitoso");
@@ -204,7 +206,7 @@ public class ReservaDAO {
         return respuesta;
     }
 
-    public void modificarReserva(int idPersona,String tipoReserva, int idMateria, int cantidadEstudiantes, int idReserva) {
+    public void modificarReserva(int idPersona,String tipoReserva, int idMateria, int cantidadEstudiantes, int idReserva, int idGrupo) {
         System.out.println("entra a modificar reserva");
         PreparedStatement ps = null;
         Connection con = ConexionDB.ConnectDB();
@@ -216,11 +218,50 @@ public class ReservaDAO {
                 ps.setString(2,tipoReserva);
                 ps.setInt(3, idMateria);
                 ps.setInt(4, cantidadEstudiantes);
-                
-                ps.setInt(5, idReserva);
+                ps.setInt(5, idGrupo);
+                ps.setInt(6, idReserva);
 
                 ps.executeUpdate();
                 message = "Modificacion realizada";
+                System.out.println("update exitoso");
+
+            } catch (SQLException ex) {
+                Logger.getLogger(ReservaDAO.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
+                message = "error " + ex.getMessage();
+            } finally {
+                // Cerrar todas las conexiones. Limpiar los recursos
+                try {
+                    if (ps != null) {
+                        ps.close();
+                    }
+                    if (con != null) {
+                        con.close();
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(ReservaDAO.class.getName()).log(Level.SEVERE, null, ex);
+                    ex.printStackTrace();
+                    message = "error " + ex.getMessage();
+                }
+            }
+
+        }
+    }
+    
+    public void modificarPrioridad(int idUnidadAcademica,boolean reserva) {
+        PreparedStatement ps = null;
+        Connection con = ConexionDB.ConnectDB();
+        if (con != null) {
+            try {
+
+                ps = con.prepareStatement(UPDATE_PRIORIDAD_RESERVA);
+                
+                ps.setBoolean(1,reserva);
+                ps.setInt(2,idUnidadAcademica);
+
+
+                ps.executeUpdate();
+                message = "Prioridad modificada";
                 System.out.println("update exitoso");
 
             } catch (SQLException ex) {
@@ -418,6 +459,8 @@ public class ReservaDAO {
                     rcreturn.setCantidadEstudiantes(rs.getInt(8));
                     if (fecha == null) {
                         rcreturn.setIdReserva(rs.getInt(9));
+                        rcreturn.setFecha(rs.getString(10));
+                        rcreturn.setNombreGrupoMateria(rs.getString(11));
                     }
                     reservaCalendarioArr.add(rcreturn);
 

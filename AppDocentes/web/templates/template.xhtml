@@ -50,6 +50,8 @@
                                 <span>Bienvenido,</span>
                                 <br></br>
                                 <h:outputLabel style="color:white" value="#{usuario.nombreRol}"/>
+                                ´<br></br>
+                                <h:outputLabel style="color:white" value="#{usuario.nombreUnidadAcademica}"/>
                             </div>
                         </div>
                         <!-- /menu profile quick info -->
@@ -66,10 +68,12 @@
                                     </li>
                                     <li><a><i class="fa fa-edit"></i> Administracion <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
-                                            <li><a id="administracion-bloques" href="../pages/calendarioForm.xhtml?faces-redirect=true">Bloques laboratorio</a></li>
-                                            <li><a id="administracion-servicios" href="../pages/formServicio.xhtml?faces-redirect=true">Servicios tecnologicos</a></li>
-                                            <li><a id="administracion-asignaturas" href="../pages/formAsignatura.xhtml?faces-redirect=true">Asignaturas</a></li>
-                                            <li><a id="administracion-asignaturas" href="../pages/formReserva.xhtml?faces-redirect=true">Reservas</a></li>
+                                            <li><a href="../pages/calendarioForm.xhtml?faces-redirect=true">Bloques laboratorio</a></li>
+                                            <li><a href="../pages/formServicio.xhtml?faces-redirect=true">Servicios tecnologicos</a></li>
+                                            <li><a href="../pages/formAsignatura.xhtml?faces-redirect=true">Asignaturas</a></li>
+                                            <li><a href="../pages/formReserva.xhtml?faces-redirect=true">Reservas</a></li>
+                                            <li><a href="../pages/formReservaPrioridad.xhtml?faces-redirect=true">Prioridad reservas</a></li>
+
                                         </ul>
                                     </li>
                                     <li><a><i class="fas fa-fingerprint" style="font-size: 20px"></i> Control BIOMINI <span class="fa fa-chevron-down"></span></a>

@@ -13,6 +13,15 @@ public  class Lista {
 
     private int id,cantidad;
     private String valor;
+    private boolean reserva;
+
+    public boolean isReserva() {
+        return reserva;
+    }
+
+    public void setReserva(boolean reserva) {
+        this.reserva = reserva;
+    }
 
     public int getId() {
         return id;

@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 public class AsistenciaDAO {
     
     
-    private String SELECT_A="SELECT p.nombre_persona,m.nombre_materia,l.nombre_laboratorio,d.bloque_ini,d.bloque_fin,c.hora_entrada,c.hora_salida,c.observacion,pe1.nombre_persona,pe2.nombre_persona,r.tipo_reserva,d.fecha FROM control_prestamo c JOIN reservas r ON c.id_reserva=r.id_reserva JOIN personas p ON r.id_persona=p.id_persona JOIN materias m ON r.id_materia=m.id_materia JOIN disponibilidad_laboratorio d ON r.id_disponibilidad=d.id_disponibilidad JOIN laboratorios l ON d.id_laboratorio=l.id_laboratorio JOIN personas pe1 ON c.id_persona_encargada_e=pe1.id_persona JOIN personas pe2 ON c.id_persona_encargada_s=pe2.id_persona";
+    private String SELECT_A=" SELECT p.nombre_persona,m.nombre_materia,l.nombre_laboratorio,d.bloque_ini,d.bloque_fin,c.hora_entrada,c.hora_salida,c.observacion,pe1.nombre_persona,pe2.nombre_persona,r.tipo_reserva,g.nombre_grupo,d.fecha FROM control_prestamo c JOIN reservas r ON c.id_reserva=r.id_reserva JOIN personas p ON r.id_persona=p.id_persona JOIN materias m ON r.id_materia=m.id_materia JOIN disponibilidad_laboratorio d ON r.id_disponibilidad=d.id_disponibilidad JOIN laboratorios l ON d.id_laboratorio=l.id_laboratorio JOIN personas pe1 ON c.id_persona_encargada_e=pe1.id_persona JOIN personas pe2 ON c.id_persona_encargada_s=pe2.id_persona LEFT JOIN grupo_materia g ON r.id_grupo_materia=g.id_grupo_materia ";
     
     ArrayList<Asistencia> asistenciaArr;
     
@@ -55,7 +55,8 @@ public class AsistenciaDAO {
                     areturn.setPersonaEncargadaEntrada(rs.getString(9));
                     areturn.setPersonaEncargadaSalida(rs.getString(10));
                     areturn.setTipoReserva(rs.getString(11));
-                    areturn.setFecha(rs.getString(12));
+                    areturn.setGrupoMateria(rs.getString(12));
+                    areturn.setFecha(rs.getString(13));
                   
                     asistenciaArr.add(areturn);
 

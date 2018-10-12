@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  */
 public class FingerPrintDAO {
 
-    private String SELECT_H = "SELECT h.id_persona,p.nombre_persona,h.huella,h.tamaño,p.id_unidad,r.nombre_rol FROM huellas h JOIN personas p ON h.id_persona=p.id_persona JOIN roles r ON p.id_rol=r.id_rol";
+    private String SELECT_H = "SELECT h.id_persona,p.nombre_persona,h.huella,h.tamaño,p.id_unidad,r.nombre_rol,p.email,u.nombre_unidad FROM huellas h JOIN personas p ON h.id_persona=p.id_persona JOIN roles r ON p.id_rol=r.id_rol JOIN unidad_academica u ON p.id_unidad=u.id_unidad ";
     private String INSERT_H = "INSERT INTO huellas (id_persona,huella,tamaño) VALUES (?,?,?)";
 
     Huella hreturn;
@@ -58,6 +58,9 @@ public class FingerPrintDAO {
                     hreturn.setTamaño(rs.getInt(4));
                     hreturn.setIdUnidad(rs.getInt(5));
                     hreturn.setNombreRol(rs.getString(6));
+                    hreturn.setEmail(rs.getString(7));
+                    hreturn.setNombreUnidadAcademica(rs.getString(8));
+
                     arr.add(hreturn);
                     //  System.out.println("consulta Result  id " + rs.getInt(1) + "\n persona" + rs.getInt(2) + "\n huella " + Arrays.toString(rs.getBytes(3)) + "\n tamaño" + rs.getInt(4));
                 }
@@ -121,9 +124,8 @@ public class FingerPrintDAO {
             }
 
         }
-      
-    }
 
+    }
 
     public static void main(String[] args) throws SQLException {
 

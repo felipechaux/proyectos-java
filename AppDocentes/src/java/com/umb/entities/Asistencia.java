@@ -11,7 +11,15 @@ package com.umb.entities;
  */
 public class Asistencia {
     
-    private String nombrePersona,materia,laboratorio,bloque,horaEntrada,horaSalida,observacion,personaEncargadaEntrada,personaEncargadaSalida,tipoReserva,fecha;
+    private String nombrePersona,materia,laboratorio,bloque,horaEntrada,horaSalida,observacion,personaEncargadaEntrada,personaEncargadaSalida,tipoReserva,fecha,grupoMateria;
+
+    public String getGrupoMateria() {
+        return grupoMateria;
+    }
+
+    public void setGrupoMateria(String grupoMateria) {
+        this.grupoMateria = grupoMateria;
+    }
 
     public String getNombrePersona() {
         return nombrePersona;

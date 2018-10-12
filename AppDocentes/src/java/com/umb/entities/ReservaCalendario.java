@@ -13,7 +13,24 @@ public class ReservaCalendario {
 
     private int idReserva,cantidadEstudiantes;
 
-    private String nombreUsuario, bloque, nombreLaboratorio, nombreMateria, tipoReserva, observacion;
+    private String nombreUsuario, bloque, nombreLaboratorio, nombreMateria, tipoReserva, observacion,fecha,nombreGrupoMateria;
+
+    public String getNombreGrupoMateria() {
+        return nombreGrupoMateria;
+    }
+
+    public void setNombreGrupoMateria(String nombreGrupoMateria) {
+        this.nombreGrupoMateria = nombreGrupoMateria;
+    }
+
+    
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
 
     public int getIdReserva() {
         return idReserva;

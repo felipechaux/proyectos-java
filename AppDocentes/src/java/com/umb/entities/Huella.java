@@ -13,7 +13,23 @@ public class Huella {
 
     private byte[] huella;
     private int tamaño,idPersona,idUnidad;
-    private String nombrePersona,nombreRol;
+    private String nombrePersona,nombreRol,email,nombreUnidadAcademica;
+
+    public String getNombreUnidadAcademica() {
+        return nombreUnidadAcademica;
+    }
+
+    public void setNombreUnidadAcademica(String nombreUnidadAcademica) {
+        this.nombreUnidadAcademica = nombreUnidadAcademica;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public int getIdUnidad() {
         return idUnidad;

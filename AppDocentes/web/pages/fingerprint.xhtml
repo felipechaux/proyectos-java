@@ -16,7 +16,7 @@
                 <h:form>
                     <f:event type="preRenderView" listener="#{fingerPrint.iniciar()}"></f:event>
                     <p:growl autoUpdate="true" />  
-                    <p:layoutUnit rendered="#{usuario.permiso==true or usuario.permiso2==true}" position="center" resizable="false" id="contenidoPrincipal"
+                    <p:layoutUnit rendered="#{usuario.permiso3==true or usuario.permiso==true or usuario.permiso2==true}" position="center" resizable="false" id="contenidoPrincipal"
                                   styleClass="pLayoutContenidoPrincipal">
 
                         <div class="content" align="center">
