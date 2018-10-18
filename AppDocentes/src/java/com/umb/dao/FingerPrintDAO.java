@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  */
 public class FingerPrintDAO {
 
-    private String SELECT_H = "SELECT h.id_persona,p.nombre_persona,h.huella,h.tamaño,p.id_unidad,r.nombre_rol,p.email,u.nombre_unidad FROM huellas h JOIN personas p ON h.id_persona=p.id_persona JOIN roles r ON p.id_rol=r.id_rol JOIN unidad_academica u ON p.id_unidad=u.id_unidad ";
+    private String SELECT_H = "SELECT h.id_persona,p.nombre_persona,h.huella,h.tamaño,p.id_unidad,r.nombre_rol,p.email,u.nombre_unidad FROM huellas h JOIN personas p ON h.id_persona=p.id_persona JOIN roles r ON p.id_rol=r.id_rol LEFT JOIN unidad_academica u ON p.id_unidad=u.id_unidad ";
     private String INSERT_H = "INSERT INTO huellas (id_persona,huella,tamaño) VALUES (?,?,?)";
 
     Huella hreturn;

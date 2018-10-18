@@ -106,11 +106,13 @@ public class Usuario extends Persona implements Serializable {
             UsuarioDAO login = new UsuarioDAO();
 
             try {
+                System.out.println("entra");
                 arrUsuario = new ArrayList();
                 arrUsuario = login.autenticar(this.getId(), this.getClave());
                 // System.out.println("sise " + arrUsuario.size());
                 if (arrUsuario.size() > 0) {
                     //permisos roles
+                    
                     this.setSession(true);
                     Persona usr = (Persona) arrUsuario.get(0);
                     //this.setId(usr.getId());
