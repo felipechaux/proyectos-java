@@ -21,14 +21,18 @@ import java.util.logging.Logger;
  *
  * @author Administrador
  */
+
+//persistencia a base de datos // usuario
+
 public class UsuarioDAO {
 
+    //consulta para guardar usuario
     private String INSERT = "INSERT INTO personas(id_persona,password,nombre_persona,id_unidad,id_rol,email) VALUES(?,?,?,?,?,?)";
-
+    //consulta para login y capturar de informacion del usuario
     private String SELECT_P = "SELECT p.id_persona,p.nombre_persona,p.id_unidad,r.nombre_rol,p.email,u.nombre_unidad FROM personas p JOIN roles r ON p.id_rol=r.id_rol LEFT JOIN unidad_academica u ON p.id_unidad=u.id_unidad WHERE id_persona=? AND password=?";
-
+    //consulta para modificar un usuario
     private String UPDATE_P = "UPDATE personas SET nombre_persona=?,password=?,email=? WHERE id_persona=?  ";
-
+    //consulta general para verficar existencia de usuario
     private String EXISTENCIA_CUENTA = "SELECT * FROM personas WHERE id_persona=?";
 
     String message;

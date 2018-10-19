@@ -13,6 +13,8 @@ import java.sql.SQLException;
  *
  * @author Administrador
  */
+
+//conexion a base de datos
 public class ConexionDB {
 
     public static Connection ConnectDB() {

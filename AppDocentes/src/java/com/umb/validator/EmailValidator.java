@@ -13,6 +13,9 @@ import org.primefaces.validate.ClientValidator;
 /**
  * Custom JSF Validator for Email input
  */
+
+//clase validadora de correos
+
 @FacesValidator("custom.emailValidator")
 public class EmailValidator implements Validator, ClientValidator {
  

@@ -19,12 +19,16 @@ import java.util.logging.Logger;
  *
  * @author Administrador
  */
+
+//persistencia a base de datos // servicio tecnologico
+
 public class ServicioDAO {
 
+    //consulta para capturar la informacion de los servicios tecnologicos
     private String SELECT_S = "SELECT s.id_servicio,s.nombre_servicio,s.cantidad,s.descripcion,s.id_laboratorio,l.nombre_laboratorio,s.tipo_servicio FROM servicios_tecnologicos s JOIN laboratorios l ON s.id_laboratorio=l.id_laboratorio ";
-
+    //consulta para guardar un servicio tecnologico
     private String INSERT_S = "INSERT INTO servicios_tecnologicos(nombre_servicio,cantidad,descripcion,id_laboratorio,tipo_servicio) VALUES (?,?,?,?,?)";
-
+    //consulta para modificar servicio tecnologico
     private String UPDATE_S = "UPDATE servicios_tecnologicos SET nombre_servicio=?,cantidad=?,descripcion=?,id_laboratorio=?,tipo_servicio=? WHERE id_servicio=? ";
 
     Servicio sreturn;

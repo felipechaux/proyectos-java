@@ -19,12 +19,16 @@ import java.util.logging.Logger;
  *
  * @author Administrador
  */
+//persistencia a base de datos // asignaturas -> materias
+
 public class AsignaturaDAO {
+    //(materias)
 
+    //conculta para listar asignaturas 
     private String SELECT_A = "SELECT m.id_materia,m.nombre_materia,m.id_unidad,u.nombre_unidad FROM materias m JOIN unidad_academica u ON m.id_unidad=u.id_unidad ";
-
+   //consulta para registrar una asignatura
     private String INSERT_A = "INSERT INTO materias(nombre_materia,id_unidad) VALUES (?,?)";
-
+    //consulta para modificar una asignatura
     private String UPDATE_A = "UPDATE materias SET nombre_materia=?,id_unidad=? WHERE id_materia=? ";
 
     Asignatura areturn;

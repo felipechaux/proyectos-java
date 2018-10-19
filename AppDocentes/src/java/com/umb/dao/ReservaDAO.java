@@ -25,36 +25,40 @@ import java.util.logging.Logger;
  *
  * @author Administrador
  */
+
+//persistencia a base de datos // reserva
+
 public class ReservaDAO {
 
+    //consulta para guardar reserva
     private String INSERT = "INSERT INTO reservas(id_persona,id_disponibilidad,tipo_reserva,id_materia,observacion,cantidad_estudiantes,id_grupo_materia) VALUES(?,?,?,?,?,?,?)";
-
+    //consulta para modificar prioridades para reservar
     private String UPDATE_PRIORIDAD_RESERVA=" UPDATE unidad_academica SET reserva=? WHERE id_unidad=? ";
-    
+    //consulta para modificar reservas
     private String UPDATE_R="UPDATE reservas SET id_persona=?,tipo_reserva=?,id_materia=?,cantidad_estudiantes=?,id_grupo_materia=? WHERE id_reserva=? ";
-    
+    //consulta para guardar el historico de los prestamos
     private String INSERT_P = "INSERT INTO control_prestamo(id_reserva,hora_entrada,observacion,id_persona_encargada_e) VALUES(?,?,?,?)";
-    //grupo laboratorio
+    //consulta para crear un nuevo grupo para una materia
     private String INSERT_G = "INSERT INTO grupo_materia(nombre_grupo,id_materia) VALUES (?,?)";
-
+   //consulta de validacion para prestamos 
     private String VALIDACION_INSERT_P = "SELECT * FROM control_prestamo WHERE id_reserva=? AND hora_entrada IS NOT NULL AND hora_salida IS NULL";
-
+    //consulta para modificar la informacion del prestamo
     private String UPDATE_P = "UPDATE control_prestamo SET hora_salida=?,id_persona_encargada_s=? WHERE id_reserva=?";
-
+    //consulta que captura el estado de la disponibilidad
     private String VALIDACION_INSERT = "SELECT estado from disponibilidad_laboratorio WHERE id_disponibilidad =?";
-
+    //consulta que captura la informacion de los servicios tecnologicos
     private String SELECT_S = "SELECT nombre_servicio,cantidad,descripcion,tipo_servicio FROM servicios_tecnologicos WHERE id_laboratorio=? AND tipo_servicio=?";
-
+    //consulta que captura las fechas disponibles para reservar
     private String SELECT_DL = "SELECT DISTINCT(fecha) FROM disponibilidad_laboratorio WHERE id_laboratorio=? AND estado='ACTIVO' AND fecha >=CURDATE()";
-
+    //consulta de disponibilidad segun fecha, laboratorio y estado activo
     private String SELECT_BL = "SELECT id_disponibilidad,bloque_ini,bloque_fin FROM disponibilidad_laboratorio WHERE fecha=? AND id_laboratorio=? AND estado='ACTIVO' ORDER BY bloque_ini,bloque_fin ASC ";
-
+    //consulta para verificar si un usuario tiene reservas para la fecha en cuestion
     private String SELECT_R = "SELECT r.id_reserva,d.fecha,d.bloque_ini,d.bloque_fin,l.nombre_laboratorio,m.nombre_materia FROM reservas r JOIN disponibilidad_laboratorio d ON r.id_disponibilidad=d.id_disponibilidad JOIN laboratorios l ON d.id_laboratorio=l.id_laboratorio JOIN materias m ON r.id_materia=m.id_materia WHERE r.id_persona=? ";
-    //all reservas calendario
+    //consulta que captura las fechas de las reservas por disponibilidad
     private String SELECT_RC = "SELECT DISTINCT(d.fecha) FROM reservas r JOIN disponibilidad_laboratorio d ON r.id_disponibilidad=d.id_disponibilidad WHERE d.fecha >=CURDATE()";
-    //reserva persona
+    //consulta para traer informacion de la reserva de un usuario
     private String SELECT_RP = "SELECT p.nombre_persona,d.bloque_ini,d.bloque_fin,l.nombre_laboratorio,m.nombre_materia,r.tipo_reserva,r.observacion,r.cantidad_estudiantes FROM reservas r JOIN disponibilidad_laboratorio d ON r.id_disponibilidad=d.id_disponibilidad JOIN personas p ON r.id_persona=p.id_persona JOIN materias m ON r.id_materia=m.id_materia  JOIN laboratorios l ON d.id_laboratorio=l.id_laboratorio WHERE d.fecha=?";
-
+    //consulta para traer informacion general de las reservas
     private String SELECT_RESERVAS = "SELECT p.nombre_persona,d.bloque_ini,d.bloque_fin,l.nombre_laboratorio,m.nombre_materia,r.tipo_reserva,r.observacion,r.cantidad_estudiantes,r.id_reserva,d.fecha,g.nombre_grupo FROM reservas r JOIN disponibilidad_laboratorio d ON r.id_disponibilidad=d.id_disponibilidad JOIN personas p ON r.id_persona=p.id_persona JOIN materias m ON r.id_materia=m.id_materia  JOIN laboratorios l ON d.id_laboratorio=l.id_laboratorio LEFT JOIN grupo_materia g ON r.id_grupo_materia=g.id_grupo_materia";
 
     Date fechaActual;

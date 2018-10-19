@@ -13,6 +13,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 
+//clase encargada de enviar notificaciones por email
 public class Correo {
 
     String FROM = "felchax@gmail.com";

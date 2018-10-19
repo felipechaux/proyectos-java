@@ -30,14 +30,17 @@ import org.apache.poi.ss.usermodel.Row;
  *
  * @author Administrador
  */
+//persistencia a base de datos // disponibilidades, bloques laboratorio
+
 public class CalendarioDAO {
 
+    //consulta que captura la disponibilidad por laboratorios
     private String SELECT_B = "SELECT d.id_disponibilidad,d.fecha,d.bloque_ini,d.bloque_fin,d.id_laboratorio,l.nombre_laboratorio,estado FROM disponibilidad_laboratorio d JOIN laboratorios l ON d.id_laboratorio=l.id_laboratorio";
-    
+    //consulta que registra una disponibilidad
     private String INSERT_B = "INSERT INTO disponibilidad_laboratorio(fecha,bloque_ini,id_laboratorio) VALUES (?,?,?)";
-    
+    //consulta que registrar los datos del cargue masivo de bloques
     private String INSERT_IMPORT="INSERT INTO disponibilidad_laboratorio(fecha,bloque_ini,id_laboratorio) VALUES (?,?,?)";
-    
+    //consulta para modificar lun bloque
     private String UPDATE_B = "UPDATE disponibilidad_laboratorio SET fecha=?,bloque_ini=?,bloque_fin=?,id_laboratorio=? WHERE id_disponibilidad=? ";
 
     String message;

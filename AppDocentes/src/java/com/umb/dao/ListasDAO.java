@@ -8,7 +8,6 @@ package com.umb.dao;
 import com.umb.entities.Lista;
 import com.umb.entities.NombreDisponibilidad;
 import com.umb.util.ConexionDB;
-import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,26 +20,29 @@ import java.util.logging.Logger;
  *
  * @author Administrador
  */
+//persistencia a base de datos // listas
+
 public class ListasDAO {
 
+    //consulta para capturar informacion de la lista unidad academica
     private String SELECT_UA2 = "SELECT id_unidad,nombre_unidad FROM unidad_academica";
-
+    //consulta para capturar informacion de la lista unidad academica con campo reserva(si es posible reservar --> 0 no tiene permisos, 1 si tiene permisos) 
     private String SELECT_UA3 = "SELECT id_unidad,nombre_unidad,reserva FROM unidad_academica";
-
+    //consulta para capturar informacion de la lista facultades
     private String SELECT_F = "SELECT * FROM facultades";
-
+    //consulta para capturar informacion de los roles que se pueden visualizar en el login
     private String SELECT_R_INDEX = "SELECT id_rol,nombre_rol FROM roles WHERE nombre_rol NOT IN ('COORDINADOR','DIRECTOR')";
-
+    //consulta para capturar informacion de los roles que se peuden visualizar por un usuario administrativo
     private String SELECT_R_ADMIN = "SELECT id_rol,nombre_rol FROM roles";
-
+    //consulta para capturar informacion de la lista usuarios con rol docente
     private String SELECT_D = "SELECT id_persona,nombre_persona FROM personas WHERE id_rol = (SELECT id_rol FROM roles WHERE nombre_rol ='DOCENTE')";
-
+    //consulta para capturar informacion de la lista laboratorios
     private String SELECT_L = "SELECT l.id_laboratorio,l.nombre_laboratorio,l.cantidad_pcs FROM laboratorios l ";
-
+    //consulta para capturar informacion de la lista facultades
     private String SELECT_M = "SELECT id_materia,nombre_materia FROM materias WHERE id_unidad=? ORDER BY nombre_materia";
-
+    //consulta para capturar informacion de la lista unidad academica (programas)
     private String SELECT_UA = "SELECT id_unidad,nombre_unidad FROM unidad_academica WHERE id_facultad=? AND tipo_programa=? ";
-
+    //consulta para capturar nombres de la disponibilidad laboratorio para el envio de correo
     private String SELECT_NOMBRES_DISPONIBILIDAD_LABORATORIO = "SELECT d.fecha,d.bloque_ini,d.bloque_fin,l.nombre_laboratorio,m.nombre_materia,p.nombre_persona,p.email \n"
             + " from disponibilidad_laboratorio d\n"
             + " JOIN laboratorios l\n"
@@ -54,7 +56,7 @@ public class ListasDAO {
             + " ON r.id_persona=p.id_persona"
             + " where d.id_disponibilidad=?";
 
-    //grupos laboratorio
+    //consulta para capturar informacion de la lista gupos laboratorio
     private String SELECT_G = " SELECT id_grupo_materia,nombre_grupo FROM grupo_materia WHERE id_materia=? ";
 
     ArrayList<Lista> listaArr;
