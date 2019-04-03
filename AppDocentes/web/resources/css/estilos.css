@@ -1,0 +1,40 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : May 22, 2018, 3:17:19 PM
+    Author     : Administrador
+*/
+
+
+
+.fc-time { 
+    display:none;
+    cursor: pointer; 
+}
+.fc-content{ 
+    margin: 0px;
+    background-color: #cc0000;
+    cursor: pointer; 
+}
+
+.dialog-label{
+    color:black;
+}
+
+.btn-huella{
+    background-color: white !important;
+    background-image: url("../images/fingerprint.jpg");
+    background-repeat: no-repeat;
+    border: none;
+    color: white;
+    padding: 8%;
+    padding-left: 14%;
+    text-align: center;
+    display: inline-block;
+    margin: 4px 2px;
+    border-radius: 50%;
+}
+

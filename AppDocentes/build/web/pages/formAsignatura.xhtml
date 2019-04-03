@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../templates/template.xhtml"> 
+            <ui:define name="content" >
+                <p:layoutUnit rendered="#{usuario.permiso3==true or usuario.permiso==true}" position="center" resizable="false" id="contenidoPrincipal"
+                              styleClass="pLayoutContenidoPrincipal" >
+                    <h:form id="form-a">
+                        <p:growl id="msg" autoUpdate="true" />  
+                        <h2><strong>Creacion de asignatura :</strong></h2>
+                        <br></br>
+                        <br></br>
+                        <br></br> 
+                        <h:panelGrid  id="panel" columns="3" cellpadding="5">
+
+                            <p:outputLabel for="nombre" value="Nombre: " />
+                            <p:inputText required="true" id="nombre" value="#{asignatura.nombreAsignatura}"/> 
+                            <p:message for="nombre" />
+
+                            <p:outputLabel for="unidad" value="Unidad academica: " />
+                            <p:selectOneMenu id="unidad"  required="true" style="width:300px;"
+                                             autoWidth="false" value="#{asignatura.idUnidad}">
+                                <f:selectItem itemLabel="Seleccione una unidad" itemValue="" ></f:selectItem>
+                                <f:selectItems value="#{asignatura.listaUA2}" var="a" itemValue="#{a.id}"  itemLabel="#{a.valor}"  />
+                            </p:selectOneMenu>
+                            <p:message for="unidad" />
+
+                            <p:commandButton value="Guardar" action="#{asignatura.crearAsignatura()}" update="asignaturas"/>
+
+                        </h:panelGrid>
+                        <br></br>
+                        <br></br> 
+                        <p:panel >
+
+                            <p:dataTable id="asignaturas" paginator="true" rows="20" value="#{asignatura.asignaturas}" var="a" style="margin-bottom:0;" selectionMode="single" selection="#{asignatura.selectedAsignatura}" rowKey="#{a.idAsignatura}" >
+
+                                <p:column headerText="Nombre"  sortBy="#{a.nombreAsignatura}" >
+                                    <h:outputText value="#{a.nombreAsignatura}"  />
+                                </p:column> 
+
+                                <p:column headerText="Unidad academica"  sortBy="#{a.nombreUnidad}" >
+                                    <h:outputText value="#{a.nombreUnidad}"  />
+                                </p:column> 
+
+                                <f:facet name="footer">
+                                    <p:commandButton process="asignaturas"   update=":form-update-asignatura:asignaturaDetail" icon="ui-icon-search" value="Editar" oncomplete="PF('asignaturaDialog').show()" />
+                                </f:facet>
+
+                            </p:dataTable>
+                        </p:panel>
+
+                    </h:form> 
+                </p:layoutUnit>
+
+                <p:dialog header="Modificar asignatura" widgetVar="asignaturaDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" height="160" width="470">
+                    <h:form id="form-update-asignatura">
+                        <p:outputPanel id="asignaturaDetail" style="text-align:center;">
+                            <p:panelGrid  columns="2" rendered="#{not empty asignatura.selectedAsignatura}" columnClasses="label,value">
+
+
+                                <p:outputLabel class="dialog-label" value="Nombre: " />
+                                <p:inputText  value="#{asignatura.selectedAsignatura.nombreAsignatura}"/> 
+                                <p:outputLabel class="dialog-label" value="Unidad academica: " />
+                                <p:selectOneMenu  style="width:300px;"
+                                                  autoWidth="false" value="#{asignatura.selectedAsignatura.idUnidad}">
+
+                                    <f:selectItems value="#{asignatura.listaUA2}" var="a" itemValue="#{a.id}"  itemLabel="#{a.valor}"  />
+                                </p:selectOneMenu>
+
+
+                                <p:commandButton value="Modificar" action="#{asignatura.modificarAsignatura()}" oncomplete="PF('asignaturaDialog').hide()" update=":form-a:asignaturas"/>
+                            </p:panelGrid>
+
+                        </p:outputPanel>
+                    </h:form>
+
+                </p:dialog>
+
+                <script>
+                    //permisos vistas
+                    $(document).on("ready", function () {
+                        switch ('#{usuario.nombreRol}') {
+                            
+                            case 'AUXILIAR DE LABORATORIO':
+                            case 'DOCENTE':
+                            {
+
+                                alert("No tiene suficientes permisos para acceder a esta pagina");
+                                break;
+                            }
+
+                        }
+                    });
+                </script>
+
+            </ui:define> 
+        </ui:composition>
+    </h:body>
+</html>
+

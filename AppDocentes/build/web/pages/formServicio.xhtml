@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../templates/template.xhtml"> 
+            <ui:define name="content" >
+                <p:layoutUnit rendered="#{usuario.permiso3==true or usuario.permiso==true}" position="center" resizable="false" id="contenidoPrincipal"
+                              styleClass="pLayoutContenidoPrincipal" >
+                    <h:form id="form-servicio">
+                        <p:growl id="msg" autoUpdate="true" />  
+                        <h2><strong>Creacion de servicio tecnologico :</strong></h2>
+                        <br></br>
+                        <br></br>
+                        <br></br> 
+                        <h:panelGrid  id="panel" columns="3" cellpadding="5">
+
+                            <p:outputLabel for="nombre" value="Nombre: " />
+                            <p:inputText required="true" id="nombre" value="#{servicio.nombre}"/> 
+                            <p:message for="nombre" />
+
+                            <p:outputLabel for="cantidad" value="Cantidad: " />
+                            <p:spinner id="cantidad" value="#{servicio.cantidad}" min="0" max="100" />
+                            <p:message for="cantidad" />
+
+                            <p:outputLabel for="descripcion" value="Descripcion: " />
+                            <p:inputTextarea  id="descripcion" value="#{servicio.descripcion}" maxlength="200"/> 
+                            <p:message for="descripcion" />
+
+                            <p:outputLabel for="laboratorio" value="Laboratorio: " />
+                            <p:selectOneMenu id="laboratorio"  required="true" requiredMessage="Laboratorio requerido" style="width:300px;"
+                                             autoWidth="false" value="#{servicio.idLaboratorio}">
+                                <f:selectItem itemLabel="Seleccione un laboratorio" itemValue="" ></f:selectItem>
+                                <f:selectItems value="#{reserva.listaL}" var="l" itemValue="#{l.id}"  itemLabel="#{l.valor}"  />
+                            </p:selectOneMenu>
+                            <p:message for="laboratorio" />
+                            
+                            <p:outputLabel for="tipo-servicio" value="Tipo de servicio : " />
+                            <p:selectOneMenu id="tipo-servicio" required="true" style="width:300px;"
+                                             autoWidth="false" value="#{servicio.tipoServicio}">
+                                <f:selectItem itemLabel="Seleccione un tipo de servicio" itemValue="" />
+                                <f:selectItem itemLabel="SOFTWARE" itemValue="SOFTWARE" />
+                                <f:selectItem itemLabel="HARDWARE" itemValue="HARDWARE" />
+                            </p:selectOneMenu>
+                              <p:message for="tipo-servicio" />
+
+                            <p:commandButton value="Guardar" action="#{servicio.crearServicio()}" update="servicios"/>
+
+                        </h:panelGrid>
+                        <br></br>
+                        <br></br> 
+                        <p:panel >
+
+                            <p:dataTable id="servicios" paginator="true" rows="20" value="#{servicio.servicios}" var="s" style="margin-bottom:0;" selectionMode="single" selection="#{servicio.selectedServicio}" rowKey="#{s.idServicio}" >
+
+                                <p:column headerText="Nombre" filterBy="#{s.nombre}" sortBy="#{s.nombre}" >
+                                    <h:outputText value="#{s.nombre}"  />
+                                </p:column> 
+
+                                <p:column headerText="Cantidad" sortBy="#{s.cantidad}">
+                                    <h:outputText value="#{s.cantidad}  " />
+                                </p:column>
+
+                                <p:column headerText="Descripcion"  sortBy="#{s.descripcion}" >
+                                    <h:outputText value="#{s.descripcion}"  />
+                                </p:column> 
+
+                                <p:column headerText="Laboratorio"  sortBy="#{s.nombreLaboratorio}" >
+                                    <h:outputText value="#{s.nombreLaboratorio}"  />
+                                </p:column>
+
+                                <p:column headerText="Tipo servicio" sortBy="#{s.tipoServicio}" >
+                                    <h:outputText value="#{s.tipoServicio}"  />
+                                </p:column> 
+
+
+                                <f:facet name="footer">
+                                    <p:commandButton process="servicios"   update=":form-servicio-update-bloque:bloqueDetail" icon="ui-icon-search" value="Editar" oncomplete="PF('servicioDialog').show()" />
+                                </f:facet>
+
+                            </p:dataTable>
+                        </p:panel>
+
+                    </h:form> 
+                </p:layoutUnit>
+
+                <p:dialog header="Modificar servicio" widgetVar="servicioDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" height="320" width="500">
+                    <h:form id="form-servicio-update-bloque">
+                        <p:outputPanel id="bloqueDetail" style="text-align:center;">
+                            <p:panelGrid  columns="2" rendered="#{not empty servicio.selectedServicio}" columnClasses="label,value">
+
+
+                                <p:outputLabel class="dialog-label" value="Nombre: " />
+                                <p:inputText  value="#{servicio.selectedServicio.nombre}"/> 
+
+                                <p:outputLabel class="dialog-label" value="Cantidad: " />
+                                <p:spinner value="#{servicio.selectedServicio.cantidad}" min="0" max="100" />
+
+                                <p:outputLabel class="dialog-label" value="Descripcion: " />
+                                <p:inputTextarea  value="#{servicio.selectedServicio.descripcion}" maxlength="200"/> 
+
+                                <p:outputLabel class="dialog-label" value="Laboratorio"/>
+                                <p:selectOneMenu  style="width:300px;"
+                                                  autoWidth="false" value="#{servicio.selectedServicio.idLaboratorio}">
+                                    <f:selectItems value="#{reserva.listaL}" var="l" itemValue="#{l.id}"  itemLabel="#{l.valor}"  />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel class="dialog-label" value="Tipo de servicio :" />
+                                <p:selectOneMenu style="width:300px;"
+                                                 autoWidth="false" value="#{servicio.selectedServicio.tipoServicio}">
+                                    <f:selectItem itemLabel="SOFTWARE" itemValue="SOFTWARE" />
+                                    <f:selectItem itemLabel="HARDWARE" itemValue="HARDWARE" />
+                                </p:selectOneMenu>
+
+                                <p:commandButton value="Modificar" action="#{servicio.modificarServicio()}" oncomplete="PF('servicioDialog').hide()" update=":form-servicio:servicios"/>
+                            </p:panelGrid>
+
+                        </p:outputPanel>
+                    </h:form>
+
+                </p:dialog>
+
+                <script>
+                    //permisos vistas
+                    $(document).on("ready", function () {
+                        switch ('#{usuario.nombreRol}') {
+
+                            case 'AUXILIAR DE LABORATORIO':
+                            case 'DOCENTE':
+                            {
+
+                                alert("No tiene suficientes permisos para acceder a esta pagina");
+                                break;
+                            }
+
+                        }
+                    });
+                </script>
+            </ui:define> 
+        </ui:composition>
+    </h:body>
+</html>
+

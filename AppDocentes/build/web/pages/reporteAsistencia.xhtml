@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../templates/template.xhtml">  
+            <ui:define name="content" >
+                <p:layoutUnit rendered="#{usuario.permiso3==true or usuario.permiso==true or usuario.permiso2==true}" position="center" resizable="false" id="contenidoPrincipal"
+                              styleClass="pLayoutContenidoPrincipal" >
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <h:form>
+                        <p:dataTable  id="r-asistencia" value="#{asistencia.asistencias}" var="a" paginator="true" rows="5" style="margin-bottom:0;" >
+
+
+                            <p:column headerText="Docente" sortBy="#{a.nombrePersona}"  >
+                                <h:outputText value="#{a.nombrePersona}"  />
+                            </p:column>
+                            <p:column headerText="Materia"  >
+                                <h:outputText value="#{a.materia}"  />
+                            </p:column>
+                            <p:column headerText="Laboratorio"  >
+                                <h:outputText value="#{a.laboratorio}"  />
+                            </p:column>
+                            <p:column headerText="Bloque"  >
+                                <h:outputText value="#{a.bloque}"  />
+                            </p:column>
+                            <p:column headerText="Hora entrada"  >
+                                <h:outputText value="#{a.horaEntrada}"  />
+                            </p:column>
+                            <p:column headerText="Hora salida"  >
+                                <h:outputText value="#{a.horaSalida}"  />
+                            </p:column>
+                            <p:column headerText="Observacion"  >
+                                <h:outputText value="#{a.observacion}"  />
+                            </p:column>
+                            <p:column headerText="Auxiliar encargado - entrada"  >
+                                <h:outputText value="#{a.personaEncargadaEntrada}"  />
+                            </p:column>
+                            <p:column headerText="Auxiliar encargado - salida"  >
+                                <h:outputText value="#{a.personaEncargadaSalida}"  />
+                            </p:column>
+                            <p:column headerText="Tipo de reserva " sortBy="#{a.tipoReserva}" >
+                                <h:outputText value="#{a.tipoReserva}"  />
+                            </p:column>
+                            <p:column headerText="Grupo materia " sortBy="#{a.grupoMateria}" >
+                                <h:outputText value="#{a.grupoMateria}"  />
+                            </p:column>
+                            <p:column headerText="Fecha"  >
+                                <h:outputText value="#{a.fecha}"  />
+                            </p:column>
+
+                        </p:dataTable>
+                        <h:commandLink rendered="#{not empty asistencia.asistencias}" style="text-align: center;margin-left: 32%;" title="Exportar" value="Exportar">
+                            <br></br>
+                            <p:graphicImage style="text-align: center;margin-left: 33.5%;" url="/resources/images/excel.png" width="24"/>
+                            <p:dataExporter type="xls" target="r-asistencia" fileName="asistencias" />
+                        </h:commandLink>
+
+
+                    </h:form>
+
+                    <br></br>
+                    <br></br>
+
+                </p:layoutUnit>
+                <script>
+                    //permisos vistas
+                    $(document).on("ready", function () {
+                        switch ('#{usuario.nombreRol}') {
+
+                            case 'DOCENTE':
+                            {
+
+                                alert("No tiene suficientes permisos para acceder a esta pagina");
+                                break;
+                            }
+
+                        }
+                    });
+                </script>
+            </ui:define> 
+        </ui:composition>
+    </h:body>
+</html>
+

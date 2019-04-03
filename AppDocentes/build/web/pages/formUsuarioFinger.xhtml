@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+        <script>
+            function finger(p) {
+
+
+
+                PF('dlg-fingerprint').show();
+                switch (p) {
+                    case "crear":
+                    {
+
+                        setTimeout(ejecuta1, 1000);
+                        break;
+                    }
+                    case "enrol":
+                    {
+
+                        setTimeout(ejecuta2, 1000);
+                        break;
+                    }
+                }
+
+            }
+            function ejecuta1() {
+
+                command();
+            }
+            function ejecuta2() {
+
+                command2();
+            }
+        </script>
+    </h:head>
+    <h:body>
+
+        <h:form>
+            <p:remoteCommand   name="command"  action="#{fingerPrint.enrolar(fingerPrint.id)}" />
+            <p:remoteCommand   name="command2"  action="#{fingerPrint.enrolar(fingerPrint.id2)}" />
+        </h:form>
+
+        <h:form>
+
+            <p:growl autoUpdate="true" />  
+            <p:panel id="grid2">
+                <p:outputLabel for="id2" value="Consultar ID:" />
+                <p:inputText  id="id2" required="true" requiredMessage="ID requerido" value="#{fingerPrint.id2}"  />
+                <p:commandButton value="Consultar " update="grid2" action="#{fingerPrint.consultarUsuario()}"></p:commandButton>
+                <p:message for="id2" />
+            </p:panel>
+        </h:form>
+
+        <br></br>
+        <br></br>
+        <h:form>
+            <f:event type="preRenderView" listener="#{listas.listasPrincipales('ADMIN')}"/>
+
+            <h:panelGrid id="grid" columns="3" cellpadding="5">
+
+                <p:outputLabel for="id" value="Identificacion:" />
+                <p:inputText  id="id" required="true" requiredMessage="Identificacion requerida" value="#{fingerPrint.id}"  />
+                <p:message for="id" />
+
+                <p:outputLabel for="nombre" value="Nombre y Apellido:" />
+                <p:inputText id="nombre" required="true" requiredMessage="Nombre requerido"  value="#{fingerPrint.nombreUsuario}"  />
+                <p:message for="nombre" />
+
+                <p:outputLabel for="clave" value="Clave:" />
+                <p:password id="clave" required="true" requiredMessage="Clave requerida" value="#{fingerPrint.clave}" feedback="true"  />
+                <p:message for="clave" />
+
+                 <p:outputLabel for="email" value="Email:" />
+                <p:inputText id="email"  required="true" requiredMessage="Email requerido" value="#{fingerPrint.email}">
+                    <f:validator validatorId="custom.emailValidator" />
+                </p:inputText>
+                <p:message for="email" />
+
+                <p:outputLabel for="programa" value="Tipo de Programa: " /> 
+                <p:selectOneMenu required="true" id="programa" requiredMessage="Tipo de programa requerido " style="width:300px;"
+                                 autoWidth="false" value="#{fingerPrint.programa}">
+                    <p:ajax listener="#{listas.listaUnidadesAcademicas(fingerPrint.facultad,fingerPrint.programa)}" update="programa_academico"  />
+                    <f:selectItem  itemValue=""  itemLabel="Seleccione tipo de programa"  />
+                    <f:selectItem  itemValue="NINGUNO"  itemLabel="NINGUNO"  />      
+                    <f:selectItem  itemValue="PREGRADO"  itemLabel="PREGRADO"  />
+                    <f:selectItem  itemValue="MAESTRIA"  itemLabel="MAESTRIA"  />
+                    <f:selectItem  itemValue="ESPECIALIZACION"  itemLabel="ESPECIALIZACION"  />
+                    <f:selectItem  itemValue="TECNOLOGIA"  itemLabel="TECNOLOGIA"  />
+                </p:selectOneMenu>
+                <p:message for="programa" />
+
+                <p:outputLabel for="facultad" value="Facultad:" /> 
+                <p:selectOneMenu required="true" id="facultad" requiredMessage="Facultad requerida" style="width:300px;"
+                                 autoWidth="false" value="#{fingerPrint.facultad}">
+                    <p:ajax listener="#{listas.listaUnidadesAcademicas(fingerPrint.facultad,fingerPrint.programa)}" update="programa_academico"  />
+                    <f:selectItem  itemValue=""  itemLabel="Seleccione facultad"  />
+                    <f:selectItem  itemValue="0"  itemLabel="NINGUNA"  />   
+                    <f:selectItems value="#{listas.listaF}" var="f" itemValue="#{f.id}"  itemLabel="#{f.valor}"  />
+                </p:selectOneMenu>
+                <p:message for="facultad" />
+
+                <p:outputLabel for="programa_academico" value="Programa academico: " /> 
+                <p:selectOneMenu required="false" id="programa_academico" requiredMessage="Programa requerido " style="width:300px;"
+                                 autoWidth="false" value="#{fingerPrint.unidadAcademica}">
+                    <f:selectItems value="#{listas.listaUA}" var="p" itemValue="#{p.id}"  itemLabel="#{p.valor}"  />       
+                </p:selectOneMenu>
+                <p:message for="programa_academico" />
+
+                <p:outputLabel for="cargo" value="Cargo:" />
+                <p:selectOneMenu id="cargo" required="true" requiredMessage="Cargo requerido" style="width:300px;"
+                                 autoWidth="false" value="#{fingerPrint.rol}">
+                    <f:selectItems value="#{listas.listaR}" var="r" itemValue="#{r.id}"  itemLabel="#{r.valor}"  />
+                </p:selectOneMenu>
+                <p:message for="cargo" />
+
+
+                <f:facet name="footer">
+                    <p:commandButton style="width: 150px;"           
+                                     action="#{fingerPrint.crearCuenta()}"
+                                     value="Crear"
+                                     update="grid"
+                                     validateClient="true"
+                                     />
+                </f:facet>
+
+            </h:panelGrid>
+        </h:form>
+
+    </h:body>
+</html>
+

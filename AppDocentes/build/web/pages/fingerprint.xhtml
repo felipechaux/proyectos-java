@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+
+    </h:head>
+    <h:body>
+
+        <ui:composition template="../templates/template.xhtml"> 
+
+            <ui:define name="content" >
+                <h:form>
+                    <f:event type="preRenderView" listener="#{fingerPrint.iniciar()}"></f:event>
+                    <p:growl autoUpdate="true" />  
+                    <p:layoutUnit rendered="#{usuario.permiso3==true or usuario.permiso==true or usuario.permiso2==true}" position="center" resizable="false" id="contenidoPrincipal"
+                                  styleClass="pLayoutContenidoPrincipal">
+
+                        <div class="content" align="center">
+
+                            <h2>Control - BIOMINI</h2> 
+                            <p:graphicImage url="/resources/images/finger.png" stream="false" />
+                            <br></br>
+                            <p:commandButton value="Enrolar" type="button" onclick="PF('dlg-usuario').show();"></p:commandButton>
+                            <br></br>
+                            <br></br>
+                            <p:commandButton value="Asistencia " onclick="PF('dlg-fingerprint').show();" action="#{fingerPrint.identificar('')}" update=":form-reservas" />
+
+                        </div>
+                    </p:layoutUnit> 
+                </h:form>
+
+                <p:dialog styleClass="title" header="Enorolamiento" widgetVar="dlg-usuario" modal="true" showEffect="fade" hideEffect="fade"  height="450" draggable="false" resizable="false" closable="true">
+                    <ui:include src="../pages/formUsuarioFinger.xhtml" />
+                </p:dialog>
+                <p:dialog styleClass="title" closable="false" draggable="false" resizable="false" header="Coloque un dedo" widgetVar="dlg-fingerprint"  modal="true" showEffect="fade" hideEffect="fade" height="260" width="290">
+                    <p:graphicImage url="/resources/images/finger.gif" stream="false" />
+                </p:dialog> 
+
+                <p:dialog styleClass="title" draggable="false" resizable="false" header="Reservas para hoy " widgetVar="dlg-reservas"  modal="true" showEffect="fade" hideEffect="fade"  height="400" width="850" >
+
+                    <h:form id="form-reservas">
+                        <h:outputLabel value="Usuario : #{fingerPrint.nombrePersonaFingerPrint}"/>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <p:dataTable id="reservas" value="#{fingerPrint.bloquesReserva}" paginator="true" rows="5"  var="p" style="width: 850px" selectionMode="single" selection="#{fingerPrint.selectedBloqueReserva}" rowKey="#{p.id}" >
+                            <p:column headerText="Fecha">
+                                <h:outputText value="#{p.fecha}" />
+                            </p:column>
+
+                            <p:column headerText="Bloque">
+                                <h:outputText value="#{p.bloque}" />
+                            </p:column>
+
+                            <p:column headerText="laboratorio">
+                                <h:outputText value="#{p.nombreLaboratorio}" />
+                            </p:column>
+
+                            <p:column headerText="Materia">
+                                <h:outputText value="#{p.nombreAsignaturaReserva}" />
+                            </p:column>
+
+                            <f:facet name="footer">
+                                <p:commandButton process="reservas"  icon="fa-arrow-circle-o-right" value="Seleccionar" action="#{fingerPrint.prestamo(usuario.id)}" />
+                            </f:facet>
+
+                        </p:dataTable>
+                    </h:form>
+
+
+                </p:dialog>
+
+
+                <p:dialog styleClass="title" draggable="false" resizable="false" header="Ingrese una observacion" widgetVar="dlg-observacion"  modal="true" height="200" width="260" >
+                    <h:form>
+                        <h:panelGrid  columns="1" cellpadding="5">
+                            <p:inputTextarea value="#{fingerPrint.observacionPrestamo}"/>
+                            <br></br>
+                            <p:commandButton    value="Guardar" action="#{fingerPrint.registrarPrestamo(usuario.id)}" />
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+                <script>
+                    //permisos vistas
+                    $(document).on("ready", function () {
+          switch ('#{usuario.nombreRol}') {
+
+                            case 'DOCENTE':
+                            {
+
+                                alert("No tiene suficientes permisos para acceder a esta pagina");
+                                break;
+                            }
+
+                        }
+                    });
+                </script>
+            </ui:define> 
+
+        </ui:composition>
+
+
+
+    </h:body>
+</html>
+

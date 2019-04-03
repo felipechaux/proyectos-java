@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b9ca015f-a8d5-465f-afd3-77cd85ff1c48">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="96"/>
+	<queryString>
+		<![CDATA[SELECT
+     disponibilidad_laboratorio.`fecha` AS disponibilidad_laboratorio_fecha,
+     disponibilidad_laboratorio.`bloque_ini` AS disponibilidad_laboratorio_bloque_ini,
+     disponibilidad_laboratorio.`bloque_fin` AS disponibilidad_laboratorio_bloque_fin,
+     disponibilidad_laboratorio.`id_laboratorio` AS disponibilidad_laboratorio_id_laboratorio,
+     disponibilidad_laboratorio.`estado` AS disponibilidad_laboratorio_estado
+FROM
+     `disponibilidad_laboratorio` disponibilidad_laboratorio]]>
+	</queryString>
+	<field name="disponibilidad_laboratorio_fecha" class="java.sql.Date"/>
+	<field name="disponibilidad_laboratorio_bloque_ini" class="java.sql.Time"/>
+	<field name="disponibilidad_laboratorio_bloque_fin" class="java.sql.Time"/>
+	<field name="disponibilidad_laboratorio_id_laboratorio" class="java.lang.Integer"/>
+	<field name="disponibilidad_laboratorio_estado" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="6a0b35f2-5d7e-425f-bec7-36f2636622ff" x="55" y="22" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[fecha]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField>
+				<reportElement uuid="cb113548-c189-40ad-ad24-59732e8e29da" x="55" y="26" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{disponibilidad_laboratorio_fecha}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

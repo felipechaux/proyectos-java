@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+
+    </h:head>
+    <h:body>
+        <ui:composition template="../templates/template.xhtml">  
+            <ui:define name="content" >
+
+                <p:layoutUnit rendered="#{usuario.permiso3==true or usuario.permiso==true}" position="center" resizable="false" id="contenidoPrincipal"
+                              styleClass="pLayoutContenidoPrincipal" >
+                    <h:form id="form-r">
+                        <f:event type="preRenderView" listener="#{reserva.cargarReservas()}"/>
+                        <p:growl id="msg" autoUpdate="true" />  
+                        <h2><strong>Reservas :</strong></h2>
+                        <br></br>
+                        <br></br>
+                        <br></br> 
+                        <p:panel >
+
+                            <p:dataTable id="reservas-all" paginator="true" rows="20" value="#{reserva.reservasCalendario}" var="r"  style="margin-bottom:0;" selection="#{reserva.selectedReservas}" rowKey="#{r.idReserva}" >
+
+                                <p:column selectionMode="multiple" style="width:35px;text-align:center"/>
+
+                                <p:column headerText="Usuario" sortBy="#{r.nombreUsuario}" filterBy="#{r.nombreUsuario}">
+                                    <h:outputText value="#{r.nombreUsuario}"  />
+                                </p:column>
+                                <p:column headerText="Fecha" sortBy="#{r.fecha}" filterBy="#{r.fecha}">
+                                    <h:outputText value="#{r.fecha}"  />
+                                </p:column>
+                                <p:column headerText="Bloque" sortBy="#{r.bloque}">
+                                    <h:outputText value="#{r.bloque}"  />
+                                </p:column>
+                                <p:column headerText="laboratorio" sortBy="#{r.nombreLaboratorio}">
+                                    <h:outputText value="#{r.nombreLaboratorio}"  />
+                                </p:column>
+                                <p:column headerText="Materia" sortBy="#{r.nombreMateria}" filterBy="#{r.nombreMateria}">
+                                    <h:outputText value="#{r.nombreMateria}" />
+                                </p:column>
+                                <p:column headerText="Grupo materia" sortBy="#{r.nombreGrupoMateria}" filterBy="#{r.nombreGrupoMateria}">
+                                    <h:outputText value="#{r.nombreGrupoMateria}" />
+                                </p:column>
+                                <p:column headerText="Tipo de reserva" sortBy="#{r.tipoReserva}">
+                                    <h:outputText value="#{r.tipoReserva}"  />
+                                </p:column>
+                                <p:column headerText="Observacion" sortBy="#{r.observacion}">
+                                    <h:outputText value="#{r.observacion}"  />
+                                </p:column>
+                                <p:column headerText="Cantidad estudiantes" sortBy="#{r.cantidadEstudiantes}">
+                                    <h:outputText value="#{r.cantidadEstudiantes}"  />
+                                </p:column>
+
+                                <f:facet name="footer">
+                                    <p:commandButton process="reservas-all" icon="ui-icon-search" update="f-md:multiDetail"  value="Editar" oncomplete="PF('multiDialog').show()"   />
+                                </f:facet>
+
+                            </p:dataTable>
+                        </p:panel>
+
+                    </h:form> 
+                </p:layoutUnit>
+
+
+                <p:dialog header="Modificar reserva" widgetVar="multiDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="700" height="300">
+
+                    <f:event type="preRenderView" listener="#{reserva.cargarMaterias(usuario.unidadAcademica)}"></f:event>
+
+                    <h:form id="f-md">
+
+                        <p:outputPanel id="multiDetail" style="text-align:center;" >
+
+                            <p:panelGrid  columns="2" rendered="#{not empty reserva.selectedReservas}" columnClasses="label,value">
+
+                                <p:outputLabel class="dialog-label" value="Docente : " />
+                                <p:selectOneMenu requiredMessage="Docente requerido" style="width:300px;"
+                                                 autoWidth="false" value="#{reserva.idPersona}">
+
+                                    <f:selectItem itemLabel="NO MODIFICAR" itemValue="0" />
+                                    <f:selectItems value="#{reserva.listaD}" var="d" itemValue="#{d.id}"  itemLabel="#{d.valor}"  />
+                                </p:selectOneMenu>
+                                <p:outputLabel class="dialog-label" value="Tipo de reserva :" />
+                                <p:selectOneMenu requiredMessage="Tipo de reserva requerido" style="width:300px;"
+                                                 autoWidth="false" value="#{reserva.tipoReserva}" >
+                                    <f:selectItem itemLabel="NO MODIFICAR" itemValue="" />
+                                    <f:selectItem itemLabel="REPOSICION" itemValue="REPOSICION" />
+                                    <f:selectItem itemLabel="TUTORIA" itemValue="TUTORIA" />
+                                    <f:selectItem itemLabel="PRACTICA" itemValue="PRACTICA" />
+                                    <f:selectItem itemLabel="REUNION" itemValue="REUNION" />
+                                    <f:selectItem itemLabel="CLASE TEORICA" itemValue="CLASE TEORICA" />
+                                </p:selectOneMenu>
+                                <p:outputLabel  class="dialog-label" value="Materia: *" />
+                                <p:selectOneMenu  requiredMessage="Materia requerida" style="width:300px;"
+                                                  autoWidth="false" value="#{reserva.idMateria}">
+                                    <p:ajax listener="#{reserva.cargarGruposMateria()}" update="lista-grupos2"  /> 
+                                    <f:selectItem itemLabel="NO MODIFICAR" itemValue="0" />
+                                    <f:selectItems value="#{reserva.listaM}" var="m" itemValue="#{m.id}" itemLabel="#{m.valor}" ></f:selectItems>
+
+                                </p:selectOneMenu>
+
+                                <p:outputLabel class="dialog-label" value="Grupo : (seleccione una materia para listar grupos)" />
+                                <p:selectOneMenu id="lista-grupos2" required="false" style="width:300px;"
+                                                 autoWidth="false" value="#{reserva.idGrupoMateria}" >
+                                    <f:selectItem itemLabel="NO MODIFICAR" itemValue="" />
+                                    <f:selectItems value="#{reserva.listaG}" var="l" itemValue="#{l.id}"  itemLabel="#{l.valor}"   />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel  class="dialog-label" value="Cantidad estudiantes: *" />
+                                <p:inputText value="#{reserva.cantidadEstudiantes}">
+                                    <p:selectBooleanCheckbox value="#{reserva.modificarCantidad}"  ></p:selectBooleanCheckbox>
+                                    <p:outputLabel  value="modificar  " />
+
+                                </p:inputText>
+
+                                <p:commandButton value="Modificar" action="#{reserva.modificarReserva()}" update=":form-r:reservas-all" oncomplete="PF('multiDialog').hide()"/>
+                            </p:panelGrid>
+
+                        </p:outputPanel>
+                    </h:form>
+
+                </p:dialog>
+
+                <script>
+                    //permisos vistas
+                    $(document).on("ready", function () {
+                        switch ('#{usuario.nombreRol}') {
+
+                            case 'AUXILIAR DE LABORATORIO':
+                            case 'DOCENTE':
+                            {
+
+                                alert("No tiene suficientes permisos para acceder a esta pagina");
+                                break;
+                            }
+
+                        }
+                    });
+                </script>
+            </ui:define> 
+        </ui:composition>
+    </h:body>
+</html>
+

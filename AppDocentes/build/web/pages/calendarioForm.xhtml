@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      >
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../templates/template.xhtml">  
+            <ui:define name="content" >
+
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <p:layoutUnit rendered="#{usuario.permiso3==true or  usuario.permiso==true}" position="center" resizable="false" id="contenidoPrincipal"
+                              styleClass="pLayoutContenidoPrincipal" >
+                    <p:tabView id="tab">
+
+                        <p:tab title="Bloques laboratorio">
+
+                            <h:form id="form">
+
+                                <p:growl id="msg" autoUpdate="true" />  
+                                <h2><strong>Creacion de bloque :</strong></h2>
+                                <br></br>
+                                <br></br>
+                                <br></br> 
+                                <h:panelGrid  id="panel" columns="3" cellpadding="5">
+
+                                    <p:outputLabel for="fecha" value="Fecha: "></p:outputLabel>
+                                    <p:calendar id="fecha" required="true" value="#{calendario.fecha}"  showOn="button" />
+                                    <p:message for="fecha" />
+
+                                    <p:outputLabel for="bloque_ini" value="Inicio bloque: "></p:outputLabel>
+                                    <p:calendar id="bloque_ini" required="true" value="#{calendario.bloqueInicio}" pattern="HH:00" timeOnly="true"  />
+                                    <p:message for="bloque_ini" />
+
+                                    <p:outputLabel for="laboratorio" value="Laboratorio: " />
+
+                                    <p:selectOneMenu  id="laboratorio"  required="true" requiredMessage="Laboratorio requerido" style="width:300px;"
+                                                      autoWidth="false" value="#{calendario.idLaboratorio}">
+                                        <p:ajax listener="#{calendario.getLabel(reserva.listaL,calendario.idLaboratorio)}"   />
+                                        <f:selectItem itemLabel="Seleccione un laboratorio" itemValue="" ></f:selectItem>
+                                        <f:selectItems value="#{reserva.listaL}"  var="l" itemValue="#{l.id}"  itemLabel="#{l.valor}"  />
+                                    </p:selectOneMenu>
+                                    <p:message for="laboratorio" />
+
+                                    <p:commandButton value="Guardar"    action="#{calendario.crearBloque()}" update="bloques"  />
+
+                                </h:panelGrid>
+                                <br></br>
+                                <br></br> 
+                                <p:panel>
+
+
+                                    <p:dataTable id="bloques" paginator="true" rows="50" value="#{calendario.bloques}" var="b" style="margin-bottom:0;" selectionMode="single" selection="#{calendario.selectedBloque}" rowKey="#{b.id}" >
+
+                                        <p:column headerText="Fecha"  sortBy="#{b.fecha}" >
+                                            <h:outputText value="#{b.fecha}"  />
+                                        </p:column>
+                                        <p:column headerText="Inicio bloque" sortBy="#{b.bloqueInicio}">
+                                            <h:outputText value="#{b.bloqueInicio}"   />
+                                        </p:column>
+
+                                        <p:column headerText="Fin bloque" sortBy="#{b.bloqueFin}">
+                                            <h:outputText value="#{b.bloqueFin}" />
+                                        </p:column>
+
+                                        <p:column headerText="Laboratorio" sortBy="#{b.nombreLaboratorio}">
+                                            <h:outputText value="#{b.nombreLaboratorio}  " />
+                                        </p:column>
+
+                                        <p:column headerText="Estado" sortBy="#{b.nombreLaboratorio}">
+                                            <h:outputText value="#{b.estado}" />
+                                        </p:column>
+
+                                        <f:facet name="footer">
+                                            <p:commandButton  id="crear" process="bloques"   update=":form-update-bloque:bloqueDetail" icon="ui-icon-search" value="Editar" oncomplete="PF('bloqueDialog').show()" />
+                                        </f:facet>
+
+                                    </p:dataTable>
+                                </p:panel>
+
+                            </h:form> 
+
+                        </p:tab>
+
+                        <p:tab title="Cargue masivo">
+                            <h:form enctype="multipart/form-data">
+                                <p:fileUpload  style="width:135px" fileUploadListener="#{calendario.handleFileUpload}"
+                                               mode="advanced" update="display" auto="true" sizeLimit="10000000"
+                                               allowTypes="/(\.|\/)(xls|xlsx|csv)$/" />
+
+                                <p:growl id="display" showDetail="true" />
+                                <p:commandButton 
+                                    value="Cargar" onstart="PF('statusDialog').show();" action="#{calendario.cargueMasivo()}" update=":tab:form:bloques" oncomplete="PF('statusDialog').hide();"/>
+
+                            </h:form>
+
+                        </p:tab>
+
+                    </p:tabView>
+                </p:layoutUnit>
+
+                <h:form>
+                </h:form>
+
+                <p:confirmDialog header="Confirmacion"  message="Desea enviar correo del bloque creado?" widgetVar="confirm" global="true" showEffect="fade" hideEffect="fade">
+                    <h:form>
+                        <p:commandButton  onstart="PF('statusDialog').show();"  action="#{calendario.correo(usuario.nombreUsuario)}" value="Si"  styleClass="ui-confirmdialog-yes" icon="ui-icon-check" oncomplete="PF('confirm').hide();PF('statusDialog').hide();" />
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </h:form>
+                </p:confirmDialog>
+
+                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                    <p:graphicImage  url="/resources/images/ajax-loader.gif" />
+                </p:dialog>
+
+                <p:dialog header="Modificar Bloque" widgetVar="bloqueDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" height="250" width="450">
+                    <h:form id="form-update-bloque">
+                        <p:outputPanel id="bloqueDetail" style="text-align:center;">
+                            <p:panelGrid  columns="2" rendered="#{not empty calendario.selectedBloque}" columnClasses="label,value">
+
+                                <p:outputLabel class="dialog-label" value="Fecha"/>
+                                <p:calendar value="#{calendario.selectedBloque.fecha}"  showOn="button" />
+
+                                <p:outputLabel class="dialog-label" value="Inicio bloque"/>
+                                <p:calendar value="#{calendario.selectedBloque.bloqueInicio}"  showOn="button" pattern="HH:00" timeOnly="true"  />
+
+                                <p:outputLabel class="dialog-label" value="Fin bloque"/>
+                                <p:calendar  value="#{calendario.selectedBloque.bloqueFin}"  showOn="button" pattern="HH:00" timeOnly="true"  />
+
+                                <p:outputLabel class="dialog-label"  value="Laboratorio"/>
+                                <p:selectOneMenu  style="width:300px;"
+                                                  autoWidth="false" value="#{calendario.selectedBloque.idLaboratorio}">
+                                    <f:selectItems value="#{reserva.listaL}" var="l" itemValue="#{l.id}"  itemLabel="#{l.valor}"  />
+                                </p:selectOneMenu>
+
+                                <p:commandButton value="Modificar" action="#{calendario.modificarBloque()}" oncomplete="PF('bloqueDialog').hide()" update=":tab:form:bloques"/>
+                            </p:panelGrid>
+
+                        </p:outputPanel>
+                    </h:form>
+
+                </p:dialog>
+                <script>
+                    //permisos vistas
+                    $(document).on("ready", function () {
+                        switch ('#{usuario.nombreRol}') {
+                            
+                            case 'AUXILIAR DE LABORATORIO':
+                            case 'DOCENTE':
+                            {
+
+                                alert("No tiene suficientes permisos para acceder a esta pagina");
+                                break;
+                            }
+
+                        }
+                    });
+                </script>
+            </ui:define> 
+        </ui:composition>
+    </h:body>
+</html>
+

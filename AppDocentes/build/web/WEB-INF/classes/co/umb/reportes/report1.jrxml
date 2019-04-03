@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="22c2670a-cc2b-4d76-9d57-a5a831d838ba">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+     disponibilidad_laboratorio.`fecha` AS disponibilidad_laboratorio_fecha,
+     disponibilidad_laboratorio.`bloque_ini` AS disponibilidad_laboratorio_bloque_ini,
+     disponibilidad_laboratorio.`bloque_fin` AS disponibilidad_laboratorio_bloque_fin,
+     disponibilidad_laboratorio.`estado` AS disponibilidad_laboratorio_estado,
+     laboratorios.`nombre_laboratorio` AS laboratorios_nombre_laboratorio
+FROM
+     `laboratorios` laboratorios INNER JOIN `disponibilidad_laboratorio` disponibilidad_laboratorio ON laboratorios.`id_laboratorio` = disponibilidad_laboratorio.`id_laboratorio`]]>
+	</queryString>
+	<field name="disponibilidad_laboratorio_fecha" class="java.sql.Date"/>
+	<field name="disponibilidad_laboratorio_bloque_ini" class="java.sql.Time"/>
+	<field name="disponibilidad_laboratorio_bloque_fin" class="java.sql.Time"/>
+	<field name="disponibilidad_laboratorio_estado" class="java.lang.String"/>
+	<field name="laboratorios_nombre_laboratorio" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="33951884-a470-4230-830d-816c80dec9fe" x="160" y="11" width="261" height="48"/>
+				<textElement>
+					<font size="24"/>
+				</textElement>
+				<text><![CDATA[Reporte Prueba]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="295f3ac5-76b5-4146-9eea-8c7f3f7149fa" x="452" y="22" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="1" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="28" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="8e27068d-1bc8-4447-a51e-c85da7300687" x="0" y="2" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[disponibilidad_laboratorio_fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6d292d26-64cf-4bd3-9b90-31bc10da83ff" x="119" y="0" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[disponibilidad_laboratorio_bloque_ini]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b9637705-f679-4d7b-b58b-734eda69b823" x="234" y="0" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[disponibilidad_laboratorio_bloque_fin]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2b05679f-f067-4f5e-95c8-910a4cc2c25b" x="352" y="2" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[disponibilidad_laboratorio_estado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f02e2e1e-21b3-472f-8143-d4e43572e23c" x="472" y="2" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[laboratorios_nombre_laboratorio]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="46" splitType="Stretch">
+			<textField>
+				<reportElement uuid="718d3c23-1242-4ca0-816b-37839ea7a066" x="0" y="11" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{disponibilidad_laboratorio_fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ba694b0e-99b2-430b-a20c-99aaf30febc9" x="119" y="11" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{disponibilidad_laboratorio_bloque_ini}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="e932694e-bf1a-4135-9477-6b5939a0fc53" x="234" y="11" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{disponibilidad_laboratorio_bloque_fin}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="879e650c-af60-4663-b391-b90e789fd91c" x="352" y="11" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{disponibilidad_laboratorio_estado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="905d71a9-b2ac-47d3-8629-54c6a3e0ff23" x="472" y="11" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{laboratorios_nombre_laboratorio}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="2" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="50" splitType="Stretch">
+			<textField>
+				<reportElement uuid="75d35834-a391-489d-a247-a8243caa6dee" x="234" y="18" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="7983ba14-2e69-4a70-94ba-66583af4f061" x="314" y="18" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="3" splitType="Stretch"/>
+	</summary>
+</jasperReport>

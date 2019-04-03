@@ -1,0 +1,81 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:form id="form">
+
+        <f:event type="preRenderView" listener="#{usuario.validarSession()}"></f:event>
+        <p:menubar styleClass="menubar" style="font-size: small;" >
+
+            <p:menuitem id="index" value="Inicio" url="#{usuario.url}" icon="ui-icon-clipboard" />
+            <p:submenu  id="administracion" label="Administracion"  >
+                <p:menuitem disabled="#{usuario.permiso}" value="Bloques laboratorio" url="../pages/calendarioForm.xhtml?faces-redirect=true" icon="ui-icon-clipboard" />
+                <p:menuitem disabled="#{usuario.permiso}" value="Servicios tecnologicos" url="../pages/formServicio.xhtml?faces-redirect=true" icon="ui-icon-clipboard" />
+                <p:menuitem disabled="#{usuario.permiso}" value="Asignaturas" url="../pages/formAsignatura.xhtml?faces-redirect=true" icon="ui-icon-clipboard" />
+            </p:submenu>
+
+            <p:submenu id="control-biomini" label="Control BIOMINI" >
+                <p:menuitem disabled="#{usuario.permiso2}" value="Enrolamiento / Asistencia" url="../pages/fingerprint.xhtml" />
+            </p:submenu>
+
+            <p:submenu id="reportes" label="Reportes" >
+                <p:menuitem disabled="#{usuario.permiso2}" value="Asistencia" url="../pages/reporteAsistencia.xhtml" icon="ui-icon-clipboard" />
+            </p:submenu>
+
+            <p:menuitem disabled="#{usuario.permiso2}" value="Calendario reservas" url="../pages/calendarioReserva.xhtml" />
+
+            <f:facet name="options">
+                <p:menuButton value="#{usuario.nombreRol} : #{usuario.nombreUsuario} ">
+                    <p:menuitem value="Modificar perfil" onclick="PF('dlg-perfil').show();" icon="ui-icon-disk" />
+                    <p:menuitem value="Cerrar Sesión"  action="#{usuario.salir}" icon="ui-icon-extlink" oncomplete="window.close();"/>
+                </p:menuButton>
+
+            </f:facet>
+
+
+        </p:menubar>
+    </h:form>
+    <p:dialog modal="true" styleClass="title" widgetVar="dlg-perfil" header="Modificar cuenta" showEffect="fade" hideEffect="fade" height="250" width="300">
+        <h:form>
+            <p:panelGrid  columns="2" >
+                <p:outputLabel value="Nombre :"/>
+                <p:inputText value="#{usuario.nombreUsuario}" />
+                <p:outputLabel value="Nueva contraseña :"/>
+                <p:password value="#{usuario.clave}" />
+                <br></br>
+                <br></br>
+                <br></br>
+                <p:commandButton value="Guardar cambios" oncomplete="PF('dlg-perfil').hide();" action="#{usuario.modificarCuenta()}"/>
+            </p:panelGrid>
+        </h:form>
+
+    </p:dialog>
+
+
+
+    <script>
+        //permisos vistas
+        $(document).on("ready", function () {
+            switch ('#{usuario.nombreRol}') {
+
+//                case 'DOCENTE':
+//                {
+//                    $('#form\\:administracion').css("display", "none");
+//                    $('#form\\:control-biomini').css("display", "none");
+//
+//                    break;
+//                }
+//                case 'AUXILIAR DE LABORATORIO':
+//                {
+//                  //  $('#form\\:administracion').css("display", "none");
+//                    $('#form\\:index').css("display", "none");
+//                    break;
+//                }
+
+            }
+        });
+    </script>
+
+</ui:composition>
