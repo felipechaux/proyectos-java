@@ -1,0 +1,3 @@
+com\chauxcode\app\MainApp.class
+com\chauxcode\model\Producto.class
+com\chauxcode\app\JPAUtil.class
